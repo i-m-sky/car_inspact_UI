@@ -1,25 +1,35 @@
-import logo from './logo.svg';
-import './App.css';
+import React, { useEffect, useState } from "react";
+import "react-multi-carousel/lib/styles.css";
+import "../node_modules/bootstrap/dist/css/bootstrap.min.css";
+import MobileView from "./components/Mobile/Mobile";
+import DesktopView from "./components/Desktop/Desktop";
+import useScreenOrientation from "./hooks/useScreenOrientation";
 
-function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
-}
+const App = () => {
+
+  const [screenType] = useScreenOrientation();
+  const [isMobile, setIsMobile] = useState(false);
+
+  useEffect(() => {
+      const handleResize = () => {
+          setIsMobile(window.innerWidth < 1000);
+      };
+
+      handleResize();
+
+      window.addEventListener('resize', handleResize);
+
+      return () => {
+          window.removeEventListener('resize', handleResize)
+      };
+
+  }, []);
+
+
+//   console.log("isMobile=>",isMobile,"screenType=>",screenType);
+
+  return ( isMobile ? <MobileView/> : <DesktopView/> );
+
+};
 
 export default App;

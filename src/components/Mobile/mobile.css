@@ -1,0 +1,77 @@
+* {
+    padding: 0;
+    margin: 0;
+    box-sizing: border-box;
+  }
+  body{
+    background: #fff9f9;
+  }
+  
+  .slider {
+    overflow:"hidden";
+    padding:1.2rem 0;
+  }
+  
+  .slider img {
+    border: 1px solid rgb(116, 113, 113);
+    height: 170px;
+    width: 180px;
+    padding: 40px;
+    border-radius:10px;
+  }
+  
+  
+  .custom-dot-list-style button{
+  border: none;
+  background: rgb(255, 68, 68);
+  }
+  .react-multi-carousel-dot.react-multi-carousel-dot--active button{
+  background: rgb(255, 68, 68) !important;
+  }
+  .react-multiple-carousel__arrow--left{
+    left: 0;
+  }
+  .sbmt-btn{
+    width: 250px;
+    padding: 8px;
+    border: none;
+    background: #147614eb;
+    color: white;
+    font-size: 1000;
+    font-weight: 600;
+    cursor: pointer;
+    height: 40px;
+    border-radius: 3px;
+  }
+
+
+
+  @media only screen and (min-width: 600px) {
+    .slider img {
+        border: 1px solid rgb(116, 113, 113) !important;
+        height: 120px !important;
+        width: 120px !important;
+        padding: 25px !important;
+        border-radius:10px !important;
+      }
+      .main-heading{
+        font-size: 20px;
+        font-weight: 700;
+      }
+      .img-type{
+        font-size: 15;
+        font-weight: 600;
+      }
+  }
+
+
+
+
+  #upload-btn {
+    display: none; /* Hide the default file input button */
+  }
+  
+  #upload-label {
+    cursor: pointer; /* Change cursor to pointer */
+  }
+  
