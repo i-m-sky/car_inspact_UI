@@ -5,6 +5,10 @@ import BackWindshield from "../../Assets/BackWindshield.png";
 import React, { useEffect, useState } from "react";
 import Carousel from "react-multi-carousel";
 import "./mobile.css";
+import ImageUpload from "../../utils/UploadImages";
+import { Button, Drawer, Radio, Space } from "antd";
+import { FaCamera } from "react-icons/fa";
+import { ImFolderUpload } from "react-icons/im";
 
 const responsive = {
   desktop: {
@@ -43,9 +47,19 @@ const sliderImageUrl = [
   },
 ];
 const Mobile = () => {
-  const [imageSrc, setImageSrc] = useState("placeholder.jpg");
+  const [open, setOpen] = useState(false);
+  const [placement, setPlacement] = useState("bottom");
+  const showDrawer = () => {
+    setOpen(true);
+  };
+  const onChange = (e) => {
+    setPlacement(e.target.value);
+  };
+  const onClose = () => {
+    setOpen(false);
+  };
 
-  // Function to handle file input change
+  const [imageSrc, setImageSrc] = useState("placeholder.jpg");
   const handleFileChange = (event) => {
     const file = event.target.files[0];
     if (file) {
@@ -57,10 +71,16 @@ const Mobile = () => {
     }
   };
 
+  useEffect(() => {
+    console.log(imageSrc);
+  }, [imageSrc]);
+
   // Function to trigger file input click
   const handleImageClick = () => {
-    document.getElementById("upload-btn").click();
+    showDrawer();
+    // document.getElementById("upload-btn").click();
   };
+
   return (
     <div className="container-fluid mt-4">
       <div className="row">
@@ -96,6 +116,8 @@ const Mobile = () => {
                     type="file"
                     id="upload-btn"
                     accept="image/*"
+                    capture="camera"
+                    multiple
                     style={{ display: "none" }}
                     onChange={handleFileChange}
                   />
@@ -122,6 +144,8 @@ const Mobile = () => {
                     type="file"
                     id="upload-btn"
                     accept="image/*"
+                    capture="camera"
+                    multiple
                     style={{ display: "none" }}
                     onChange={handleFileChange}
                   />
@@ -148,6 +172,8 @@ const Mobile = () => {
                     type="file"
                     id="upload-btn"
                     accept="image/*"
+                    capture="camera"
+                    multiple
                     style={{ display: "none" }}
                     onChange={handleFileChange}
                   />
@@ -174,12 +200,12 @@ const Mobile = () => {
                     type="file"
                     id="upload-btn"
                     accept="image/*"
+                    capture="camera"
+                    multiple
                     style={{ display: "none" }}
-                    onChange={handleFileChange}
                   />
                 </div>
               </div>
-    
             </Carousel>
             <div className="d-flex justify-content-center align-items-center">
               <button className="sbmt-btn">Submit and Upload</button>
@@ -187,6 +213,40 @@ const Mobile = () => {
           </div>
         </div>
       </div>
+      <Drawer
+        placement={placement}
+        width={500}
+        height={130}
+        onClose={onClose}
+        open={open}
+        headerStyle={{ display: "none" }} 
+        closeIcon={null} 
+        extra={<Space></Space>}
+        className="upload-file-drawer"
+      >
+        <div className="">
+          <h5 className="text-center">Choose an Action</h5>
+          <div className="d-flex">
+          <div className="upload-btns">
+            <div className="cam-btn text-center">
+            <FaCamera size={35} onClick={() => document.getElementById("upload-btn").click()}/>
+            </div>
+            <div className="text-center">
+            Camera
+            </div>
+          </div>
+          <div className="upload-btns ">
+          <div className="cam-btn text-center">
+            <ImFolderUpload size={35} onClick={() => document.getElementById("upload-btn").click()}/>
+            </div>
+            <div className="text-center">
+              Files
+            </div>
+          </div>
+          
+          </div>
+        </div>
+      </Drawer>
     </div>
   );
 };

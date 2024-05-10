@@ -1,11 +1,4 @@
-* {
-    padding: 0;
-    margin: 0;
-    box-sizing: border-box;
-  }
-  body{
-    background: #fff9f9;
-  }
+
   
   .slider {
     overflow:"hidden";
@@ -74,4 +67,12 @@
   #upload-label {
     cursor: pointer; /* Change cursor to pointer */
   }
+  
+
+
+  .upload-btns{
+    margin-right: 25px;
+    cursor: pointer;
+  }
+
   
