@@ -1,14 +1,14 @@
+import React, { useState } from "react";
+import { Drawer, Space } from "antd";
+import { FaCamera } from "react-icons/fa";
+import { ImFolderUpload } from "react-icons/im";
+import Carousel from "react-multi-carousel";
 import CarFront from "../../Assets/CarFront.png";
 import CarBack from "../../Assets/CarBack.png";
 import FrontWindshield from "../../Assets/FrontWindshield.png";
 import BackWindshield from "../../Assets/BackWindshield.png";
-import React, { useEffect, useState } from "react";
-import Carousel from "react-multi-carousel";
+import "react-multi-carousel/lib/styles.css";
 import "./mobile.css";
-import ImageUpload from "../../utils/UploadImages";
-import { Button, Drawer, Radio, Space } from "antd";
-import { FaCamera } from "react-icons/fa";
-import { ImFolderUpload } from "react-icons/im";
 
 const responsive = {
   desktop: {
@@ -46,39 +46,56 @@ const sliderImageUrl = [
     url: FrontWindshield,
   },
 ];
+
 const Mobile = () => {
   const [open, setOpen] = useState(false);
-  const [placement, setPlacement] = useState("bottom");
-  const showDrawer = () => {
+  const [selectedType, setSelectedType] = useState("camera");
+  const [currentView, setCurrentView] = useState("");
+
+  const [images, setImages] = useState({
+    "Front View": [],
+    "Rear View": [],
+    "Back Windshield": [],
+    "Front Windshield": [],
+  });
+
+  const showDrawer = (view) => {
+    setCurrentView(view);
     setOpen(true);
   };
-  const onChange = (e) => {
-    setPlacement(e.target.value);
-  };
-  const onClose = () => {
-    setOpen(false);
-  };
+  const onClose = () => setOpen(false);
 
-  const [imageSrc, setImageSrc] = useState("placeholder.jpg");
   const handleFileChange = (event) => {
-    const file = event.target.files[0];
-    if (file) {
+    const files = Array.from(event.target.files);
+    files.forEach((file) => {
       const reader = new FileReader();
-      reader.onload = function (e) {
-        setImageSrc(e.target.result);
+      reader.onloadend = () => {
+        const base64String = reader.result;
+        setImages((prevImages) => ({
+          ...prevImages,
+          [currentView]: [...(prevImages[currentView] || []), base64String],
+        }));
       };
       reader.readAsDataURL(file);
+    });
+  };
+
+  const triggerFileInput = (type) => {
+    const fileInput = document.getElementById("upload-btn");
+    if (fileInput) {
+      if (type === "camera") {
+        fileInput.setAttribute("capture", "environment");
+        fileInput.accept = "image/*";
+      } else {
+        fileInput.removeAttribute("capture");
+        fileInput.accept = "*/*";
+      }
+      fileInput.click();
     }
   };
 
-  useEffect(() => {
-    console.log(imageSrc);
-  }, [imageSrc]);
-
-  // Function to trigger file input click
-  const handleImageClick = () => {
-    showDrawer();
-    // document.getElementById("upload-btn").click();
+  const handleSubmit = (e) => {
+    e.preventDefault();
   };
 
   return (
@@ -90,164 +107,88 @@ const Mobile = () => {
               Please Upload Images click on the section below start the
               inspection.
             </span>
-            <Carousel
-              responsive={responsive}
-              dotListClass="custom-dot-list-style"
-            >
-              <div className="slider text-center">
-                <div className="">
-                  <span className="img-type">Front View</span>
-                </div>
-                <div id="image-container">
-                  <img
-                    id="uploaded-image"
-                    src={CarFront}
-                    alt="Uploaded Image"
-                    style={{
-                      width: "100%",
-                      height: "100%",
-                      objectFit: "cover",
-                      cursor: "pointer",
-                    }}
-                    onClick={handleImageClick}
-                  />
-
-                  <input
-                    type="file"
-                    id="upload-btn"
-                    accept="image/*"
-                    capture="camera"
-                    multiple
-                    style={{ display: "none" }}
-                    onChange={handleFileChange}
-                  />
-                </div>
+            <form onSubmit={handleSubmit}>
+              <Carousel
+                responsive={responsive}
+                dotListClass="custom-dot-list-style"
+              >
+                {sliderImageUrl.map((image, index) => (
+                  <div key={index} className="slider text-center">
+                    <div>
+                      <span className="img-type">{image.text}</span>
+                    </div>
+                    <div id="image-container">
+                      <img
+                        id="uploaded-image"
+                        src={image.url}
+                        alt="Uploaded Image"
+                        style={{
+                          width: "100%",
+                          height: "100%",
+                          objectFit: "cover",
+                          cursor: "pointer",
+                        }}
+                        onClick={() => showDrawer(image.text)}
+                      />
+                    </div>
+                  </div>
+                ))}
+              </Carousel>
+              <div className="d-flex justify-content-center align-items-center">
+                <button type="submit" className="sbmt-btn">
+                  Submit and Upload
+                </button>
               </div>
-
-              <div className="slider text-center">
-                <div className="">
-                  <span className="img-type">Rear View</span>
-                </div>
-
-                <div id="image-container">
-                  <img
-                    id="uploaded-image"
-                    src={CarBack}
-                    alt="Uploaded Image"
-                    style={{
-                      cursor: "pointer",
-                    }}
-                    onClick={handleImageClick}
-                  />
-
-                  <input
-                    type="file"
-                    id="upload-btn"
-                    accept="image/*"
-                    capture="camera"
-                    multiple
-                    style={{ display: "none" }}
-                    onChange={handleFileChange}
-                  />
-                </div>
-              </div>
-
-              <div className="slider text-center">
-                <div className="">
-                  <span className="img-type">Back Windshield</span>
-                </div>
-
-                <div id="image-container">
-                  <img
-                    id="uploaded-image"
-                    src={BackWindshield}
-                    alt="Uploaded Image"
-                    style={{
-                      cursor: "pointer",
-                    }}
-                    onClick={handleImageClick}
-                  />
-
-                  <input
-                    type="file"
-                    id="upload-btn"
-                    accept="image/*"
-                    capture="camera"
-                    multiple
-                    style={{ display: "none" }}
-                    onChange={handleFileChange}
-                  />
-                </div>
-              </div>
-
-              <div className="slider text-center">
-                <div className="">
-                  <span className="img-type">Front Windshield</span>
-                </div>
-
-                <div id="image-container">
-                  <img
-                    id="uploaded-image"
-                    src={FrontWindshield}
-                    alt="Uploaded Image"
-                    onClick={handleImageClick}
-                    style={{
-                      cursor: "pointer",
-                    }}
-                  />
-
-                  <input
-                    type="file"
-                    id="upload-btn"
-                    accept="image/*"
-                    capture="camera"
-                    multiple
-                    style={{ display: "none" }}
-                  />
-                </div>
-              </div>
-            </Carousel>
-            <div className="d-flex justify-content-center align-items-center">
-              <button className="sbmt-btn">Submit and Upload</button>
-            </div>
+            </form>
           </div>
         </div>
       </div>
+
       <Drawer
-        placement={placement}
-        width={500}
+        placement="bottom"
         height={130}
         onClose={onClose}
         open={open}
-        headerStyle={{ display: "none" }} 
-        closeIcon={null} 
-        extra={<Space></Space>}
+        headerStyle={{ display: "none" }}
+        closeIcon={null}
+        extra={<Space />}
         className="upload-file-drawer"
       >
-        <div className="">
+        <div>
           <h5 className="text-center">Choose an Action</h5>
           <div className="d-flex">
-          <div className="upload-btns">
-            <div className="cam-btn text-center">
-            <FaCamera size={35} onClick={() => document.getElementById("upload-btn").click()}/>
+            <div className="upload-btns">
+              <div className="cam-btn text-center">
+                <FaCamera
+                  size={35}
+                  onClick={() => triggerFileInput("camera")}
+                />
+              </div>
+              <div className="text-center">Camera</div>
             </div>
-            <div className="text-center">
-            Camera
+            <div className="upload-btns">
+              <div className="cam-btn text-center">
+                <ImFolderUpload
+                  size={35}
+                  onClick={() => triggerFileInput("files")}
+                />
+              </div>
+              <div className="text-center">Files</div>
             </div>
-          </div>
-          <div className="upload-btns ">
-          <div className="cam-btn text-center">
-            <ImFolderUpload size={35} onClick={() => document.getElementById("upload-btn").click()}/>
-            </div>
-            <div className="text-center">
-              Files
-            </div>
-          </div>
-          
           </div>
         </div>
       </Drawer>
+      <input
+        type="file"
+        id="upload-btn"
+        accept="image/*"
+        capture={selectedType}
+        multiple
+        style={{ display: "none" }}
+        onChange={handleFileChange}
+      />
     </div>
   );
 };
+
 export default Mobile;

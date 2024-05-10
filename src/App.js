@@ -4,6 +4,8 @@ import "../node_modules/bootstrap/dist/css/bootstrap.min.css";
 import MobileView from "./components/Mobile/Mobile";
 import DesktopView from "./components/Desktop/Desktop";
 import useScreenOrientation from "./hooks/useScreenOrientation";
+import NotSupportScreenMode from "./components/Pages/NotSupportScreenMode";
+
 
 const App = () => {
 
@@ -14,7 +16,6 @@ const App = () => {
       const handleResize = () => {
           setIsMobile(window.innerWidth < 1000);
       };
-
       handleResize();
 
       window.addEventListener('resize', handleResize);
@@ -25,10 +26,7 @@ const App = () => {
 
   }, []);
 
-
-//   console.log("isMobile=>",isMobile,"screenType=>",screenType);
-
-  return ( isMobile ? <MobileView/> : <DesktopView/> );
+  return ( isMobile ? screenType === "l" ? <MobileView/> : <NotSupportScreenMode/> : <DesktopView/> );
 
 };
 
