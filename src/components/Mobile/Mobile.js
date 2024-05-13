@@ -9,6 +9,7 @@ import FrontWindshield from "../../Assets/FrontWindshield.png";
 import BackWindshield from "../../Assets/BackWindshield.png";
 import "react-multi-carousel/lib/styles.css";
 import "./mobile.css";
+import { GetApi, PostApi } from "../../Services/Service";
 
 const responsive = {
   desktop: {
@@ -30,11 +31,11 @@ const responsive = {
 
 const sliderImageUrl = [
   {
-    text: "Front View",
+    text: "front_view",
     url: CarFront,
   },
   {
-    text: "Rear View",
+    text: "rear_view",
     url: CarBack,
   },
   {
@@ -53,8 +54,8 @@ const Mobile = () => {
   const [currentView, setCurrentView] = useState("");
 
   const [images, setImages] = useState({
-    "Front View": [],
-    "Rear View": [],
+    "front_view": [],
+    "rear_view": [],
     "Back Windshield": [],
     "Front Windshield": [],
   });
@@ -63,21 +64,15 @@ const Mobile = () => {
     setCurrentView(view);
     setOpen(true);
   };
+
   const onClose = () => setOpen(false);
 
   const handleFileChange = (event) => {
-    const files = Array.from(event.target.files);
-    files.forEach((file) => {
-      const reader = new FileReader();
-      reader.onloadend = () => {
-        const base64String = reader.result;
+    const files = event.target.files[0];
         setImages((prevImages) => ({
           ...prevImages,
-          [currentView]: [...(prevImages[currentView] || []), base64String],
+          [currentView]: [...(prevImages[currentView] || []), files],
         }));
-      };
-      reader.readAsDataURL(file);
-    });
   };
 
   const triggerFileInput = (type) => {
@@ -96,6 +91,25 @@ const Mobile = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
+    console.log(images,"img");
+
+    const formData = new FormData();
+
+    for (const [label, files] of Object.entries(images)) {
+      files.forEach((file, index) => {
+        formData.append(`${label}`,file);
+      });
+    }
+
+    PostApi("/predict",formData, {
+      headers: {
+        'Content-Type': 'multipart/form-data'
+      }
+    }).then((res) => {
+        console.log(res, "Res");
+    }).catch((err) => {
+        console.log(err);
+    });
   };
 
   return (
@@ -183,7 +197,7 @@ const Mobile = () => {
         id="upload-btn"
         accept="image/*"
         capture={selectedType}
-        multiple
+        // multiple
         style={{ display: "none" }}
         onChange={handleFileChange}
       />
