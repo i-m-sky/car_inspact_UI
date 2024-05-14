@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useRef, useState } from "react";
 import { Drawer, Space } from "antd";
 import { FaCamera } from "react-icons/fa";
 import { ImFolderUpload } from "react-icons/im";
@@ -10,6 +10,7 @@ import BackWindshield from "../../Assets/BackWindshield.png";
 import "react-multi-carousel/lib/styles.css";
 import "./mobile.css";
 import { GetApi, PostApi } from "../../Services/Service";
+import { Image,Spin } from 'antd';
 
 const responsive = {
   desktop: {
@@ -52,11 +53,13 @@ const Mobile = () => {
   const [open, setOpen] = useState(false);
   const [selectedType, setSelectedType] = useState("camera");
   const [currentView, setCurrentView] = useState("");
-
+  const [checkedImages,setCheckedImages] = useState(null);
+  const [loading,setLoading] = useState(false);
+  const containerRef = useRef(null);
   const [images, setImages] = useState({
     "front_view": [],
     "rear_view": [],
-    "Back Windshield": [],
+    "back_windshield": [],
     "Front Windshield": [],
   });
 
@@ -73,6 +76,7 @@ const Mobile = () => {
           ...prevImages,
           [currentView]: [...(prevImages[currentView] || []), files],
         }));
+        onClose()
   };
 
   const triggerFileInput = (type) => {
@@ -90,6 +94,7 @@ const Mobile = () => {
   };
 
   const handleSubmit = (e) => {
+    setLoading(true);
     e.preventDefault();
     console.log(images,"img");
 
@@ -106,16 +111,19 @@ const Mobile = () => {
         'Content-Type': 'multipart/form-data'
       }
     }).then((res) => {
-        console.log(res, "Res");
+        setCheckedImages(res)
+        setLoading(false);
+        containerRef.current.scrollTo(0, containerRef.current.scrollHeight);
     }).catch((err) => {
+      setLoading(false);
         console.log(err);
     });
   };
-
+  console.log(checkedImages, "checkedImages");
   return (
     <div className="container-fluid mt-4">
       <div className="row">
-        <div className="col-md-12">
+        <div className="col-md-12" ref={containerRef}>
           <div className="parent mb-4">
             <span className="main-heading">
               Please Upload Images click on the section below start the
@@ -149,13 +157,28 @@ const Mobile = () => {
                 ))}
               </Carousel>
               <div className="d-flex justify-content-center align-items-center">
+                {loading ? <Spin /> : 
                 <button type="submit" className="sbmt-btn">
                   Submit and Upload
                 </button>
+                }
               </div>
             </form>
           </div>
         </div>
+
+        {
+          checkedImages &&  Object.entries(checkedImages).map( ([key,value]) =>(
+            <div className="col-4 mt-5 mb-3" >
+            <Image
+              width={200}
+              src={value.checked_image_path}
+            />
+          </div>
+          ))
+        }
+        
+       
       </div>
 
       <Drawer
