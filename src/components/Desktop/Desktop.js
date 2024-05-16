@@ -1,4 +1,4 @@
-import ComingSoon from "../Pages/ComingSoon";
+import ComingSoon from "../../Pages/ComingSoon";
 const Desktop = () =>{
     return (
        <ComingSoon/>

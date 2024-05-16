@@ -1,7 +1,7 @@
 // src/components/ComingSoon.js
 
 import React, { useState, useEffect } from 'react';
-import './ComingSoon.css';
+import '../Assets/css/commingsoon.css';
 
 const ComingSoon = () => {
     const [countdown, setCountdown] = useState('');

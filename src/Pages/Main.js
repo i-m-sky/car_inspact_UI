@@ -3,18 +3,16 @@ import { Drawer, Space } from "antd";
 import { FaCamera } from "react-icons/fa";
 import { ImFolderUpload } from "react-icons/im";
 import Carousel from "react-multi-carousel";
-import CarFront from "../../Assets/images/CarFront.png";
-import CarBack from "../../Assets/images/CarBack.png";
-import FrontWindshield from "../../Assets/images/FrontWindshield.png";
-import BackWindshield from "../../Assets/images/BackWindshield.png";
-import Image360 from "../../Assets/images/360.png"
-import VIN from "../../Assets/images/Vin.jpeg"
-import Odometer from "../../Assets/images/odometer.jpeg"
-import Damage from "../../Assets/images/Carscan.jpeg"
+import Image360 from "../Assets/images/360.png";
+import VIN from "../Assets/images/Vin.jpeg";
+import Odometer from "../Assets/images/odometer.jpeg";
+import Damage from "../Assets/images/Carscan.jpeg";
 import "react-multi-carousel/lib/styles.css";
-import "./mobile.css";
-import { GetApi, PostApi } from "../../Services/Service";
-import { Image,Spin } from 'antd';
+import "../Assets/css/main.css";
+import { GetApi, PostApi } from "../Services/Service";
+import { Image, Spin } from "antd";
+import { useNavigate } from "react-router-dom";
+import ScannerLoader from "./ScannerLoader";
 
 const responsive = {
   desktop: {
@@ -34,64 +32,49 @@ const responsive = {
   },
 };
 
-const sliderImageUrl = [
-  {
-    text: "front_view",
-    url: CarFront,
-  },
-  {
-    text: "rear_view",
-    url: CarBack,
-  },
-  {
-    text: "Back Windshield",
-    url: BackWindshield,
-  },
-  {
-    text: "Front Windshield",
-    url: FrontWindshield,
-  },
-];
-
 const HomeViewUrls = [
   {
     text: "Images Capture",
     url: Image360,
+    uploaded:false
   },
   {
     text: "VIN",
     url: VIN,
+    uploaded:false
   },
   {
     text: "Odometer",
     url: Odometer,
+    uploaded:false
   },
   {
     text: "Damage",
     url: Damage,
+    uploaded:false
   },
-]
+];
 
-const Mobile = () => {
+const Main = () => {
   const [open, setOpen] = useState(false);
   const [selectedType, setSelectedType] = useState("camera");
+  const [currentIndex, setCurrentIndex] = useState(null);
+  const [uploadedImageIndexs,setUploadedImageIndex] = useState([]);
   const [currentView, setCurrentView] = useState("");
-  const [checkedImages,setCheckedImages] = useState(null);
-  const [loading,setLoading] = useState(false);
+  const [loading, setLoading] = useState(false);
   const containerRef = useRef(null);
-  const [view360, setView360] = useState(true);
+  const [scannerLoader, setScannerLoader] = useState(false);
   const [images, setImages] = useState({
-    "front_view": [],
-    "rear_view": [],
-    "back_windshield": [],
-    "Front Windshield": [],
   });
+    const [checkedImages, setCheckedImages] = useState(null);
+  const navigate = useNavigate();
 
-  const showDrawer = (view) => {
-    if(view == "Images Capture"){
-      setView360(false);
+  const showDrawer = (view,index) => {
+    setCurrentIndex(index)
+    if (view == "Images Capture") {
+      navigate("/view360");
       setCurrentView(view);
-      return
+      return;
     }
     setCurrentView(view);
     setOpen(true);
@@ -100,16 +83,19 @@ const Mobile = () => {
   const onClose = () => setOpen(false);
 
   const handleFileChange = (event) => {
+   
     const files = event.target.files[0];
-        setImages((prevImages) => ({
-          ...prevImages,
-          [currentView]: [...(prevImages[currentView] || []), files],
-        }));
-        onClose()
+    setImages((prevImages) => ({
+      ...prevImages,
+      [currentView]: [...(prevImages[currentView] || []), files],
+    }));
+    setUploadedImageIndex(uploadedImageIndexs => [...uploadedImageIndexs,currentIndex] );
+    onClose();
   };
+  console.log(uploadedImageIndexs,'uu');
 
   const triggerFileInput = (type) => {
-    console.log(type,'type======');
+    
     const fileInput = document.getElementById("upload-btn");
     if (fileInput) {
       if (type === "camera") {
@@ -124,43 +110,43 @@ const Mobile = () => {
   };
 
   const handleSubmit = (e) => {
-    setLoading(true);
     e.preventDefault();
+    setScannerLoader(true)
 
-    // const formData = new FormData();
+    const formData = new FormData();
 
-    // for (const [label, files] of Object.entries(images)) {
-    //   files.forEach((file, index) => {
-    //     formData.append(`${label}`,file);
-    //   });
-    // }
+    for (const [label, files] of Object.entries(images)) {
+      files.forEach((file, index) => {
+        formData.append(`${label}`,file);
+      });
+    }
 
-    // PostApi("/predict",formData, {
-    //   headers: {
-    //     'Content-Type': 'multipart/form-data'
-    //   }
-    // }).then((res) => {
-    //     setCheckedImages(res)
-    //     setLoading(false);
-    //     containerRef.current.scrollTo(0, containerRef.current.scrollHeight);
-    // }).catch((err) => {
-    //   setLoading(false);
-    //     console.log(err);
-    // });
+    PostApi("/predict",formData, {
+      headers: {
+        'Content-Type': 'multipart/form-data'
+      }
+    }).then((res) => {
+        setCheckedImages(res)
+        setScannerLoader(false);
+        containerRef.current.scrollTo(0, containerRef.current.scrollHeight);
+    }).catch((err) => {
+      setScannerLoader(false);
+        console.log(err);
+    });
   };
 
   return (
     <div className="container-fluid mt-4">
       <div className="row">
         <div className="col-md-12" ref={containerRef}>
+          {scannerLoader ? <ScannerLoader/> :
           <div className="parent mb-4">
             <span className="main-heading">
               Please Upload Images click on the section below start the
               inspection.
             </span>
-            {
-              view360 ? 
-              <form onSubmit={handleSubmit}>
+
+            <form onSubmit={handleSubmit}>
               <Carousel
                 responsive={responsive}
                 dotListClass="custom-dot-list-style"
@@ -170,7 +156,6 @@ const Mobile = () => {
                     <div>
                       <span className="img-type">{image.text}</span>
                     </div>
-                    <div id="image-container">
                       <img
                         id="uploaded-image"
                         src={image.url}
@@ -181,72 +166,31 @@ const Mobile = () => {
                           objectFit: "cover",
                           cursor: "pointer",
                         }}
-                        onClick={() => showDrawer(image.text)}
+                        className={uploadedImageIndexs.includes(index) ? "uploaded":""}
+                        onClick={() => showDrawer(image.text,index)}
                       />
-                    </div>
                   </div>
                 ))}
               </Carousel>
               <div className="d-flex justify-content-center align-items-center">
-                {loading ? <Spin /> : 
-                <button type="submit" className="sbmt-btn">
-                  Submit and Upload
-                </button>
-                }
-              </div>
-            </form> : 
-                <form onSubmit={handleSubmit}>
-                <Carousel
-                  responsive={responsive}
-                  dotListClass="custom-dot-list-style"
-                >
-                  {sliderImageUrl.map((image, index) => (
-                    <div key={index} className="slider text-center">
-                      <div>
-                        <span className="img-type">{image.text}</span>
-                      </div>
-                      <div id="image-container">
-                        <img
-                          id="uploaded-image"
-                          src={image.url}
-                          alt="Uploaded Image"
-                          style={{
-                            width: "100%",
-                            height: "100%",
-                            objectFit: "cover",
-                            cursor: "pointer",
-                          }}
-                          onClick={() => showDrawer(image.text)}
-                        />
-                      </div>
-                    </div>
-                  ))}
-                </Carousel>
-                <div className="d-flex justify-content-center align-items-center">
-                  {loading ? <Spin /> : 
+                {loading ? (
+                  <Spin />
+                ) : (
                   <button type="submit" className="sbmt-btn">
                     Submit and Upload
                   </button>
-                  }
-                </div>
-              </form>
-            }
-         
-          </div>
+                )}
+              </div>
+            </form>
+          </div>}
         </div>
 
-        {
-          checkedImages &&  Object.entries(checkedImages).map( ([key,value]) =>(
-            <div className="col-4 mt-5 mb-3" >
-            <Image
-              width={200}
-              src={value.checked_image_path}
-            />
-          </div>
-          ))
-        }
-        
-       
+        {checkedImages &&
+          Object.entries(checkedImages).map(([key, value]) => (
+            <div className="col-4 mt-5 mb-3">
+              <Image width={200} src={value.checked_image_path} />
+            </div>
+          ))}
       </div>
 
       <Drawer
@@ -296,4 +240,4 @@ const Mobile = () => {
   );
 };
 
-export default Mobile;
+export default Main;
