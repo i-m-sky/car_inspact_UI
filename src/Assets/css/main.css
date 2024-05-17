@@ -1,9 +1,9 @@
-.slider {
+.home-slider {
   overflow: "hidden";
   padding: 1.2rem 0;
 }
 
-.slider img {
+.home-slider img {
   border: 1px solid rgb(116, 113, 113);
   height: 170px;
   width: 180px;
@@ -11,16 +11,16 @@
   border-radius: 10px;
 }
 
-.uploaded{
-    background-color: green;
+.uploaded {
+  background-color: green;
 }
 
-.slider .uploaded-success{
-    border: .3px solid rgb(116, 113, 113);
-    height: 125px;
-    width: 125px;
-    padding: 5px;
-    border-radius: 10px;
+.home-slider .uploaded-success {
+  border: 0.3px solid rgb(116, 113, 113);
+  height: 125px;
+  width: 125px;
+  padding: 5px;
+  border-radius: 10px;
 }
 
 .custom-dot-list-style button {
@@ -47,7 +47,7 @@
 }
 
 @media only screen and (min-width: 600px) {
-  .slider img {
+  .home-slider img {
     border: 1px solid rgb(116, 113, 113) !important;
     height: 120px !important;
     width: 120px !important;
@@ -76,4 +76,3 @@
   margin-right: 25px;
   cursor: pointer;
 }
-

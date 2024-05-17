@@ -1,14 +1,28 @@
-.view360slider {
+.slider {
   overflow: "hidden";
   padding: 1.2rem 0;
 }
-.view360slider img {
+
+.slider img {
   border: 1px solid rgb(116, 113, 113);
   height: 170px;
   width: 180px;
-  padding: 40px;
+  padding: 20px;
   border-radius: 10px;
 }
+
+.slider .uploaded_360 {
+  border: 6px solid rgb(48 166 48) !important;
+}
+
+.slider .uploaded-success {
+  border: 0.3px solid rgb(116, 113, 113);
+  height: 125px;
+  width: 125px;
+  padding: 5px;
+  border-radius: 10px;
+}
+
 .custom-dot-list-style button {
   border: none;
   background: rgb(255, 68, 68);
@@ -31,12 +45,13 @@
   height: 40px;
   border-radius: 3px;
 }
+
 @media only screen and (min-width: 600px) {
-  .view360slider img {
+  .slider img {
     border: 1px solid rgb(116, 113, 113) !important;
     height: 120px !important;
     width: 120px !important;
-    padding: 25px !important;
+    padding: 15px !important;
     border-radius: 10px !important;
   }
   .main-heading {
@@ -48,12 +63,15 @@
     font-weight: 600;
   }
 }
+
 #upload-btn {
   display: none; /* Hide the default file input button */
 }
+
 #upload-label {
   cursor: pointer; /* Change cursor to pointer */
 }
+
 .upload-btns {
   margin-right: 25px;
   cursor: pointer;

@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from "react";
 import "react-multi-carousel/lib/styles.css";
 import "../node_modules/bootstrap/dist/css/bootstrap.min.css";
-import MobileView from "./components/Mobile/Mobile";
 import DesktopView from "./components/Desktop/Desktop";
 import useScreenOrientation from "./hooks/useScreenOrientation";
 import NotSupportScreenMode from "./Pages/NotSupportScreenMode";

@@ -1,4 +1,4 @@
-import React, { useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { Drawer, Space } from "antd";
 import { FaCamera } from "react-icons/fa";
 import { ImFolderUpload } from "react-icons/im";
@@ -7,11 +7,12 @@ import CarFront from "../Assets/images/CarFront.png";
 import CarBack from "../Assets/images/CarBack.png";
 import FrontWindshield from "../Assets/images/FrontWindshield.png";
 import BackWindshield from "../Assets/images/BackWindshield.png";
-
 import "react-multi-carousel/lib/styles.css";
 import "../Assets/css/view360.css";
 import { GetApi, PostApi } from "../Services/Service";
 import { Image, Spin } from "antd";
+import { useNavigate } from "react-router-dom";
+import LoadingBar from "../components/LoadingBar";
 
 const responsive = {
   desktop: {
@@ -31,43 +32,46 @@ const responsive = {
   },
 };
 
-const sliderImageUrl = [
+const HomeViewUrls = [
   {
-    text: "front_view",
+    text: "FrontView",
     url: CarFront,
+    uploaded: false,
   },
   {
-    text: "rear_view",
+    text: "BackView",
     url: CarBack,
-  },
-  {
-    text: "Back Windshield",
-    url: BackWindshield,
+    uploaded: false,
   },
   {
     text: "Front Windshield",
     url: FrontWindshield,
+    uploaded: false,
+  },
+  {
+    text: "Back Windshield",
+    url: BackWindshield,
+    uploaded: false,
   },
 ];
 
 const View360 = () => {
   const [open, setOpen] = useState(false);
+  const [loadingBar, setLoadingBar] = useState(true);
   const [selectedType, setSelectedType] = useState("camera");
+  const [currentIndex, setCurrentIndex] = useState(null);
+  const [uploadedImageIndexs, setUploadedImageIndex] = useState([]);
   const [currentView, setCurrentView] = useState("");
-  const [checkedImages, setCheckedImages] = useState(null);
   const [loading, setLoading] = useState(false);
   const containerRef = useRef(null);
-  const [view360, setView360] = useState(true);
-  const [images, setImages] = useState({
-    front_view: [],
-    rear_view: [],
-    back_windshield: [],
-    "Front Windshield": [],
-  });
+  const [scannerLoader, setScannerLoader] = useState(false);
+  const [images, setImages] = useState({});
+  const [checkedImages, setCheckedImages] = useState(null);
+  const navigate = useNavigate();
 
-  const showDrawer = (view) => {
+  const showDrawer = (view, index) => {
+    setCurrentIndex(index);
     if (view == "Images Capture") {
-      setView360(false);
       setCurrentView(view);
       return;
     }
@@ -83,11 +87,14 @@ const View360 = () => {
       ...prevImages,
       [currentView]: [...(prevImages[currentView] || []), files],
     }));
+    setUploadedImageIndex((uploadedImageIndexs) => [
+      ...uploadedImageIndexs,
+      currentIndex,
+    ]);
     onClose();
   };
 
   const triggerFileInput = (type) => {
-    console.log(type, "type======");
     const fileInput = document.getElementById("upload-btn");
     if (fileInput) {
       if (type === "camera") {
@@ -102,81 +109,99 @@ const View360 = () => {
   };
 
   const handleSubmit = (e) => {
-    setLoading(true);
-    e.preventDefault();
+    navigate("/", { state: { view360: images } });
+    // e.preventDefault();
+    // setScannerLoader(true);
 
-    const formData = new FormData();
+    // const formData = new FormData();
 
-    for (const [label, files] of Object.entries(images)) {
-      files.forEach((file, index) => {
-        formData.append(`${label}`, file);
-      });
-    }
+    // for (const [label, files] of Object.entries(images)) {
+    //   files.forEach((file, index) => {
+    //     formData.append(`${label}`, file);
+    //   });
+    // }
+    // const data = JSON.stringify(images);
+    // const pdata = JSON.parse(data);
+    // console.log(pdata, "formData from view360");
 
-    PostApi("/predict", formData, {
-      headers: {
-        "Content-Type": "multipart/form-data",
-      },
-    })
-      .then((res) => {
-        setCheckedImages(res);
-        setLoading(false);
-        containerRef.current.scrollTo(0, containerRef.current.scrollHeight);
-      })
-      .catch((err) => {
-        setLoading(false);
-        console.log(err);
-      });
+    // PostApi("/predict", formData, {
+    //   headers: {
+    //     "Content-Type": "multipart/form-data",
+    //   },
+    // })
+    //   .then((res) => {
+    //     setCheckedImages(res);
+    //     setScannerLoader(false);
+    //     containerRef.current.scrollTo(0, containerRef.current.scrollHeight);
+    //   })
+    //   .catch((err) => {
+    //     setScannerLoader(false);
+    //     console.log(err);
+    //   });
   };
+
+  useEffect(() => {
+    setTimeout(() => {
+      setLoadingBar(false);
+    }, 1600);
+  }, []);
 
   return (
     <div className="container-fluid mt-4">
       <div className="row">
         <div className="col-md-12" ref={containerRef}>
-          <div className="parent mb-4">
-            <span className="main-heading">
-              Please Upload Images click on the section below start the
-              inspection.
-            </span>
+          {loadingBar ? (
+            <LoadingBar />
+          ) : (
+            <div className="parent mb-4">
+              <span className="main-heading">
+                Please Upload Images click on the section below start the
+                inspection.
+              </span>
 
-            <form onSubmit={handleSubmit}>
-              <Carousel
-                responsive={responsive}
-                dotListClass="custom-dot-list-style"
-              >
-                {sliderImageUrl.map((image, index) => (
-                  <div key={index} className="view360slider text-center">
-                    <div>
-                      <span className="img-type">{image.text}</span>
+              <form onSubmit={handleSubmit}>
+                <Carousel
+                  responsive={responsive}
+                  dotListClass="custom-dot-list-style"
+                >
+                  {HomeViewUrls.map((image, index) => (
+                    <div key={index} className="slider text-center">
+                      <div>
+                        <span className="img-type">{image.text}</span>
+                      </div>
+                      <div>
+                        <img
+                          src={image.url}
+                          alt="Uploaded Image"
+                          style={{
+                            width: "100%",
+                            height: "100%",
+                            objectFit: "cover",
+                            cursor: "pointer",
+                          }}
+                          onClick={() => showDrawer(image.text, index)}
+                          className={
+                            uploadedImageIndexs.includes(index)
+                              ? "uploaded_360"
+                              : ""
+                          }
+                        />
+                      </div>
                     </div>
-                    <div id="image-container">
-                      <img
-                        id="uploaded-image"
-                        src={image.url}
-                        alt="Uploaded Image"
-                        style={{
-                          width: "100%",
-                          height: "100%",
-                          objectFit: "cover",
-                          cursor: "pointer",
-                        }}
-                        onClick={() => showDrawer(image.text)}
-                      />
-                    </div>
-                  </div>
-                ))}
-              </Carousel>
-              <div className="d-flex justify-content-center align-items-center">
-                {loading ? (
-                  <Spin />
-                ) : (
-                  <button type="submit" className="sbmt-btn">
-                    Submit and Upload
-                  </button>
-                )}
-              </div>
-            </form>
-          </div>
+                  ))}
+                </Carousel>
+                <div className="d-flex justify-content-center align-items-center">
+                  {loading ? (
+                    <Spin />
+                  ) : (
+                    <button type="submit" className="sbmt-btn">
+                      Submit and Upload
+                    </button>
+                  )}
+                </div>
+              </form>
+            </div>
+          )}
         </div>
 
         {checkedImages &&

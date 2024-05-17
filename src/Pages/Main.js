@@ -1,4 +1,4 @@
-import React, { useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { Drawer, Space } from "antd";
 import { FaCamera } from "react-icons/fa";
 import { ImFolderUpload } from "react-icons/im";
@@ -13,6 +13,7 @@ import { GetApi, PostApi } from "../Services/Service";
 import { Image, Spin } from "antd";
 import { useNavigate } from "react-router-dom";
 import ScannerLoader from "./ScannerLoader";
+import { useLocation } from "react-router-dom";
 
 const responsive = {
   desktop: {
@@ -36,22 +37,22 @@ const HomeViewUrls = [
   {
     text: "Images Capture",
     url: Image360,
-    uploaded:false
+    uploaded: false,
   },
   {
     text: "VIN",
     url: VIN,
-    uploaded:false
+    uploaded: false,
   },
   {
     text: "Odometer",
     url: Odometer,
-    uploaded:false
+    uploaded: false,
   },
   {
     text: "Damage",
     url: Damage,
-    uploaded:false
+    uploaded: false,
   },
 ];
 
@@ -59,18 +60,18 @@ const Main = () => {
   const [open, setOpen] = useState(false);
   const [selectedType, setSelectedType] = useState("camera");
   const [currentIndex, setCurrentIndex] = useState(null);
-  const [uploadedImageIndexs,setUploadedImageIndex] = useState([]);
+  const [uploadedImageIndexs, setUploadedImageIndex] = useState([]);
   const [currentView, setCurrentView] = useState("");
   const [loading, setLoading] = useState(false);
   const containerRef = useRef(null);
   const [scannerLoader, setScannerLoader] = useState(false);
-  const [images, setImages] = useState({
-  });
-    const [checkedImages, setCheckedImages] = useState(null);
+  const [images, setImages] = useState({});
+  const [checkedImages, setCheckedImages] = useState(null);
   const navigate = useNavigate();
+  const location = useLocation();
 
-  const showDrawer = (view,index) => {
-    setCurrentIndex(index)
+  const showDrawer = (view, index) => {
+    setCurrentIndex(index);
     if (view == "Images Capture") {
       navigate("/view360");
       setCurrentView(view);
@@ -83,19 +84,20 @@ const Main = () => {
   const onClose = () => setOpen(false);
 
   const handleFileChange = (event) => {
-   
     const files = event.target.files[0];
     setImages((prevImages) => ({
       ...prevImages,
       [currentView]: [...(prevImages[currentView] || []), files],
     }));
-    setUploadedImageIndex(uploadedImageIndexs => [...uploadedImageIndexs,currentIndex] );
+    setUploadedImageIndex((uploadedImageIndexs) => [
+      ...uploadedImageIndexs,
+      currentIndex,
+    ]);
     onClose();
   };
-  console.log(uploadedImageIndexs,'uu');
+  console.log(uploadedImageIndexs, "uu");
 
   const triggerFileInput = (type) => {
-    
     const fileInput = document.getElementById("upload-btn");
     if (fileInput) {
       if (type === "camera") {
@@ -111,51 +113,67 @@ const Main = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    setScannerLoader(true)
+    setScannerLoader(true);
 
     const formData = new FormData();
 
     for (const [label, files] of Object.entries(images)) {
       files.forEach((file, index) => {
-        formData.append(`${label}`,file);
+        formData.append(`${label}`, file);
       });
     }
 
-    PostApi("/predict",formData, {
-      headers: {
-        'Content-Type': 'multipart/form-data'
+    if (location?.state?.view360) {
+      for (const [label, files] of Object.entries(location?.state?.view360)) {
+        files.forEach((file, index) => {
+          formData.append(`${label}`, file);
+        });
       }
-    }).then((res) => {
-        setCheckedImages(res)
+    }
+
+    PostApi("/predict", formData, {
+      headers: {
+        "Content-Type": "multipart/form-data",
+      },
+    })
+      .then((res) => {
+        setCheckedImages(res);
         setScannerLoader(false);
         containerRef.current.scrollTo(0, containerRef.current.scrollHeight);
-    }).catch((err) => {
-      setScannerLoader(false);
+      })
+      .catch((err) => {
+        setScannerLoader(false);
         console.log(err);
-    });
+      });
   };
+
+  useEffect(() => {
+    // console.log(location.state.view360);
+  }, []);
 
   return (
     <div className="container-fluid mt-4">
       <div className="row">
         <div className="col-md-12" ref={containerRef}>
-          {scannerLoader ? <ScannerLoader/> :
-          <div className="parent mb-4">
-            <span className="main-heading">
-              Please Upload Images click on the section below start the
-              inspection.
-            </span>
+          {scannerLoader ? (
+            <ScannerLoader />
+          ) : (
+            <div className="parent mb-4">
+              <span className="main-heading">
+                Please Upload Images click on the section below start the
+                inspection.
+              </span>
 
-            <form onSubmit={handleSubmit}>
-              <Carousel
-                responsive={responsive}
-                dotListClass="custom-dot-list-style"
-              >
-                {HomeViewUrls.map((image, index) => (
-                  <div key={index} className="slider text-center">
-                    <div>
-                      <span className="img-type">{image.text}</span>
-                    </div>
+              <form onSubmit={handleSubmit}>
+                <Carousel
+                  responsive={responsive}
+                  dotListClass="custom-dot-list-style"
+                >
+                  {HomeViewUrls.map((image, index) => (
+                    <div key={index} className="home-slider text-center">
+                      <div>
+                        <span className="img-type">{image.text}</span>
+                      </div>
                       <img
                         id="uploaded-image"
                         src={image.url}
@@ -166,23 +184,26 @@ const Main = () => {
                           objectFit: "cover",
                           cursor: "pointer",
                         }}
-                        className={uploadedImageIndexs.includes(index) ? "uploaded":""}
-                        onClick={() => showDrawer(image.text,index)}
+                        className={
+                          uploadedImageIndexs.includes(index) ? "uploaded" : ""
+                        }
+                        onClick={() => showDrawer(image.text, index)}
                       />
-                  </div>
-                ))}
-              </Carousel>
-              <div className="d-flex justify-content-center align-items-center">
-                {loading ? (
-                  <Spin />
-                ) : (
-                  <button type="submit" className="sbmt-btn">
-                    Submit and Upload
-                  </button>
-                )}
-              </div>
-            </form>
-          </div>}
+                    </div>
+                  ))}
+                </Carousel>
+                <div className="d-flex justify-content-center align-items-center">
+                  {loading ? (
+                    <Spin />
+                  ) : (
+                    <button type="submit" className="sbmt-btn">
+                      Submit and Upload
+                    </button>
+                  )}
+                </div>
+              </form>
+            </div>
+          )}
         </div>
 
         {checkedImages &&
