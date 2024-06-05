@@ -69,11 +69,24 @@ const Main = () => {
   const [checkedImages, setCheckedImages] = useState(null);
   const navigate = useNavigate();
   const location = useLocation();
+  const [inspectionToken, setInspectionToken] = useState("");
+
+  const getInspectionToken = async () => {
+    const params = new URLSearchParams(window.location.search);
+    const token = params.get("inspection");
+    if (token) {
+      setInspectionToken(token);
+    }
+  };
+
+  useEffect(() => {
+    getInspectionToken();
+  }, []);
 
   const showDrawer = (view, index) => {
     setCurrentIndex(index);
     if (view == "Images Capture") {
-      navigate("/view360");
+      navigate("/view360?inspection=" + inspectionToken);
       setCurrentView(view);
       return;
     }
@@ -95,7 +108,6 @@ const Main = () => {
     ]);
     onClose();
   };
-  console.log(uploadedImageIndexs, "uu");
 
   const triggerFileInput = (type) => {
     const fileInput = document.getElementById("upload-btn");
@@ -131,7 +143,7 @@ const Main = () => {
       }
     }
 
-    PostApi("/predict", formData, {
+    PostApi("/predict?inspection=" + inspectionToken, formData, {
       headers: {
         "Content-Type": "multipart/form-data",
       },

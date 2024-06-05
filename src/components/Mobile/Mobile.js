@@ -7,14 +7,14 @@ import CarFront from "../../Assets/images/CarFront.png";
 import CarBack from "../../Assets/images/CarBack.png";
 import FrontWindshield from "../../Assets/images/FrontWindshield.png";
 import BackWindshield from "../../Assets/images/BackWindshield.png";
-import Image360 from "../../Assets/images/360.png"
-import VIN from "../../Assets/images/Vin.jpeg"
-import Odometer from "../../Assets/images/odometer.jpeg"
-import Damage from "../../Assets/images/Carscan.jpeg"
+import Image360 from "../../Assets/images/360.png";
+import VIN from "../../Assets/images/Vin.jpeg";
+import Odometer from "../../Assets/images/odometer.jpeg";
+import Damage from "../../Assets/images/Carscan.jpeg";
 import "react-multi-carousel/lib/styles.css";
 import "./mobile.css";
 import { GetApi, PostApi } from "../../Services/Service";
-import { Image,Spin } from 'antd';
+import { Image, Spin } from "antd";
 
 const responsive = {
   desktop: {
@@ -70,28 +70,28 @@ const HomeViewUrls = [
     text: "Damage",
     url: Damage,
   },
-]
+];
 
 const Mobile = () => {
   const [open, setOpen] = useState(false);
   const [selectedType, setSelectedType] = useState("camera");
   const [currentView, setCurrentView] = useState("");
-  const [checkedImages,setCheckedImages] = useState(null);
-  const [loading,setLoading] = useState(false);
+  const [checkedImages, setCheckedImages] = useState(null);
+  const [loading, setLoading] = useState(false);
   const containerRef = useRef(null);
   const [view360, setView360] = useState(true);
   const [images, setImages] = useState({
-    "front_view": [],
-    "rear_view": [],
-    "back_windshield": [],
+    front_view: [],
+    rear_view: [],
+    back_windshield: [],
     "Front Windshield": [],
   });
 
   const showDrawer = (view) => {
-    if(view == "Images Capture"){
+    if (view == "Images Capture") {
       setView360(false);
       setCurrentView(view);
-      return
+      return;
     }
     setCurrentView(view);
     setOpen(true);
@@ -101,15 +101,15 @@ const Mobile = () => {
 
   const handleFileChange = (event) => {
     const files = event.target.files[0];
-        setImages((prevImages) => ({
-          ...prevImages,
-          [currentView]: [...(prevImages[currentView] || []), files],
-        }));
-        onClose()
+    setImages((prevImages) => ({
+      ...prevImages,
+      [currentView]: [...(prevImages[currentView] || []), files],
+    }));
+    onClose();
   };
 
   const triggerFileInput = (type) => {
-    console.log(type,'type======');
+    console.log(type, "type======");
     const fileInput = document.getElementById("upload-btn");
     if (fileInput) {
       if (type === "camera") {
@@ -158,44 +158,46 @@ const Mobile = () => {
               Please Upload Images click on the section below start the
               inspection.
             </span>
-            {
-              view360 ? 
+            {view360 ? (
               <form onSubmit={handleSubmit}>
-              <Carousel
-                responsive={responsive}
-                dotListClass="custom-dot-list-style"
-              >
-                {HomeViewUrls.map((image, index) => (
-                  <div key={index} className="slider text-center">
-                    <div>
-                      <span className="img-type">{image.text}</span>
+                <Carousel
+                  responsive={responsive}
+                  dotListClass="custom-dot-list-style"
+                >
+                  {HomeViewUrls.map((image, index) => (
+                    <div key={index} className="slider text-center">
+                      <div>
+                        <span className="img-type">{image.text}</span>
+                      </div>
+                      <div id="image-container">
+                        <img
+                          id="uploaded-image"
+                          src={image.url}
+                          alt="Uploaded Image"
+                          style={{
+                            width: "100%",
+                            height: "100%",
+                            objectFit: "cover",
+                            cursor: "pointer",
+                          }}
+                          onClick={() => showDrawer(image.text)}
+                        />
+                      </div>
                     </div>
-                    <div id="image-container">
-                      <img
-                        id="uploaded-image"
-                        src={image.url}
-                        alt="Uploaded Image"
-                        style={{
-                          width: "100%",
-                          height: "100%",
-                          objectFit: "cover",
-                          cursor: "pointer",
-                        }}
-                        onClick={() => showDrawer(image.text)}
-                      />
-                    </div>
-                  </div>
-                ))}
-              </Carousel>
-              <div className="d-flex justify-content-center align-items-center">
-                {loading ? <Spin /> : 
-                <button type="submit" className="sbmt-btn">
-                  Submit and Upload
-                </button>
-                }
-              </div>
-            </form> : 
-                <form onSubmit={handleSubmit}>
+                  ))}
+                </Carousel>
+                <div className="d-flex justify-content-center align-items-center">
+                  {loading ? (
+                    <Spin />
+                  ) : (
+                    <button type="submit" className="sbmt-btn">
+                      Submit and Upload
+                    </button>
+                  )}
+                </div>
+              </form>
+            ) : (
+              <form onSubmit={handleSubmit}>
                 <Carousel
                   responsive={responsive}
                   dotListClass="custom-dot-list-style"
@@ -223,30 +225,25 @@ const Mobile = () => {
                   ))}
                 </Carousel>
                 <div className="d-flex justify-content-center align-items-center">
-                  {loading ? <Spin /> : 
-                  <button type="submit" className="sbmt-btn">
-                    Submit and Upload
-                  </button>
-                  }
+                  {loading ? (
+                    <Spin />
+                  ) : (
+                    <button type="submit" className="sbmt-btn">
+                      Submit and Upload
+                    </button>
+                  )}
                 </div>
               </form>
-            }
-         
+            )}
           </div>
         </div>
 
-        {
-          checkedImages &&  Object.entries(checkedImages).map( ([key,value]) =>(
-            <div className="col-4 mt-5 mb-3" >
-            <Image
-              width={200}
-              src={value.checked_image_path}
-            />
-          </div>
-          ))
-        }
-        
-       
+        {checkedImages &&
+          Object.entries(checkedImages).map(([key, value]) => (
+            <div className="col-4 mt-5 mb-3">
+              <Image width={200} src={value.checked_image_path} />
+            </div>
+          ))}
       </div>
 
       <Drawer
