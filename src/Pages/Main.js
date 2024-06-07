@@ -151,6 +151,7 @@ const Main = () => {
       .then((res) => {
         setCheckedImages(res);
         setScannerLoader(false);
+        navigate("/submitted")
         containerRef.current.scrollTo(0, containerRef.current.scrollHeight);
       })
       .catch((err) => {
