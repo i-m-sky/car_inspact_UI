@@ -190,7 +190,7 @@ const View360 = () => {
                         <Spin />
                       ) : (
                         <button type="submit" className="sbmt-btn">
-                          Submit and Upload
+                          Upload
                         </button>
                       )}
                     </div>

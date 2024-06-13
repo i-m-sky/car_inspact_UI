@@ -45,11 +45,11 @@ const HomeViewUrls = [
     url: VIN,
     uploaded: false,
   },
-  {
-    text: "Number Plate",
-    url: NumberPlate,
-    uploaded: false,
-  },
+  // {
+  //   text: "Number Plate",
+  //   url: NumberPlate,
+  //   uploaded: false,
+  // },
   {
     text: "Odometer",
     url: Odometer,
