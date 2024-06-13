@@ -5,7 +5,7 @@ const ComingSoon = () => {
   const [countdown, setCountdown] = useState("");
 
   useEffect(() => {
-    const countDownDate = new Date("June 1, 2024 00:00:00").getTime();
+    const countDownDate = new Date("August 1, 2024 00:00:00").getTime();
 
     const intervalId = setInterval(() => {
       const now = new Date().getTime();
@@ -19,7 +19,7 @@ const ComingSoon = () => {
       const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
       const seconds = Math.floor((distance % (1000 * 60)) / 1000);
 
-      const countdownString = `${days}d ${hours}h ${minutes}m ${seconds}s`;
+      const countdownString = `${days} days ${hours}h ${minutes}m ${seconds}s`;
       setCountdown(countdownString);
 
       if (distance < 0) {

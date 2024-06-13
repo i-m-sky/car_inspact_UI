@@ -7,7 +7,7 @@ import Image360 from "../Assets/images/360.png";
 import VIN from "../Assets/images/Vin.jpeg";
 import Odometer from "../Assets/images/odometer.jpeg";
 import Damage from "../Assets/images/Carscan.jpeg";
-import NumberPlate from "../Assets/images/Number.jpeg"
+import NumberPlate from "../Assets/images/Number.jpeg";
 import "react-multi-carousel/lib/styles.css";
 import "../Assets/css/main.css";
 import { GetApi, PostApi } from "../Services/Service";
@@ -157,7 +157,7 @@ const Main = () => {
       .then((res) => {
         setCheckedImages(res);
         setScannerLoader(false);
-        // navigate("/submitted")
+        navigate("/submitted");
         containerRef.current.scrollTo(0, containerRef.current.scrollHeight);
       })
       .catch((err) => {

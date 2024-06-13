@@ -109,7 +109,6 @@ const Mobile = () => {
   };
 
   const triggerFileInput = (type) => {
-    console.log(type, "type======");
     const fileInput = document.getElementById("upload-btn");
     if (fileInput) {
       if (type === "camera") {
