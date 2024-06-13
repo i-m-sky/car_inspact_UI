@@ -29,17 +29,38 @@ const App = () => {
     }
   };
 
+  // useEffect(() => {
+  //   verifyToken();
+  //   const handleResize = () => {
+  //     setIsMobile(window.innerWidth < 1000);
+  //   };
+  //   handleResize();
+
+  //   window.addEventListener("resize", handleResize);
+
+  //   return () => {
+  //     window.removeEventListener("resize", handleResize);
+  //   };
+  // }, []);
+
   useEffect(() => {
     verifyToken();
+
     const handleResize = () => {
       setIsMobile(window.innerWidth < 1000);
     };
-    handleResize();
 
+    const handleOrientationChange = () => {
+      setIsMobile(window.innerWidth < 1000);
+    };
+
+    handleResize();
     window.addEventListener("resize", handleResize);
+    window.addEventListener("orientationchange", handleOrientationChange);
 
     return () => {
       window.removeEventListener("resize", handleResize);
+      window.removeEventListener("orientationchange", handleOrientationChange);
     };
   }, []);
 

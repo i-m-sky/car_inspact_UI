@@ -188,28 +188,31 @@ const Main = () => {
                   responsive={responsive}
                   dotListClass="custom-dot-list-style"
                 >
-                  {HomeViewUrls.map((image, index) => (
-                    <div key={index} className="home-slider text-center">
-                      <div>
-                        <span className="img-type">{image.text}</span>
+                  {HomeViewUrls &&
+                    HomeViewUrls.map((image, index) => (
+                      <div key={index} className="home-slider text-center">
+                        <div>
+                          <span className="img-type">{image.text}</span>
+                        </div>
+                        <img
+                          id="uploaded-image"
+                          src={image.url}
+                          alt="Uploaded Image"
+                          style={{
+                            width: "100%",
+                            height: "100%",
+                            objectFit: "cover",
+                            cursor: "pointer",
+                          }}
+                          className={
+                            uploadedImageIndexs.includes(index)
+                              ? "uploaded"
+                              : ""
+                          }
+                          onClick={() => showDrawer(image.text, index)}
+                        />
                       </div>
-                      <img
-                        id="uploaded-image"
-                        src={image.url}
-                        alt="Uploaded Image"
-                        style={{
-                          width: "100%",
-                          height: "100%",
-                          objectFit: "cover",
-                          cursor: "pointer",
-                        }}
-                        className={
-                          uploadedImageIndexs.includes(index) ? "uploaded" : ""
-                        }
-                        onClick={() => showDrawer(image.text, index)}
-                      />
-                    </div>
-                  ))}
+                    ))}
                 </Carousel>
                 <div className="d-flex justify-content-center align-items-center">
                   {loading ? (
