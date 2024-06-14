@@ -11,7 +11,7 @@ import NumberPlate from "../Assets/images/Number.jpeg";
 import "react-multi-carousel/lib/styles.css";
 import "../Assets/css/main.css";
 import { GetApi, PostApi } from "../Services/Service";
-import { Image, Spin } from "antd";
+import { Image, Spin, Button, message } from "antd";
 import { useNavigate } from "react-router-dom";
 import ScannerLoader from "./ScannerLoader";
 import { useLocation } from "react-router-dom";
@@ -186,6 +186,7 @@ const Main = () => {
       location?.state?.currentIndex &&
       Object.keys(location?.state?.view360 ?? {}).length > 0
     ) {
+      openMessage();
       setUploadedImageIndex((uploadedImageIndexs) => [
         ...uploadedImageIndexs,
         Number(location?.state?.currentIndex),
@@ -193,112 +194,133 @@ const Main = () => {
     }
   }, []);
 
+  const [messageApi, contextHolder] = message.useMessage();
+  const key = "updatable";
+  const openMessage = () => {
+    messageApi.open({
+      key,
+      type: "loading",
+      content: "Uploading...",
+    });
+    setTimeout(() => {
+      messageApi.open({
+        key,
+        type: "success",
+        content: "360 view Image Uploaded",
+        duration: 2,
+      });
+    }, 1000);
+  };
+
   return (
-    <div className="container-fluid mt-4">
-      <div className="row">
-        <div className="col-md-12" ref={containerRef}>
-          {scannerLoader ? (
-            <ScannerLoader />
-          ) : (
-            <div className="parent mb-4">
-              <span className="main-heading">
-                Please Upload Images click on the section below start the
-                inspection.
-              </span>
+    <>
+      {contextHolder}
+      <div className="container-fluid mt-4">
+        <div className="row">
+          <div className="col-md-12" ref={containerRef}>
+            {scannerLoader ? (
+              <ScannerLoader />
+            ) : (
+              <div className="parent mb-4">
+                <span className="main-heading">
+                  Please Upload Images click on the section below start the
+                  inspection.
+                </span>
 
-              <form onSubmit={handleSubmit}>
-                <Carousel
-                  responsive={responsive}
-                  dotListClass="custom-dot-list-style"
-                >
-                  {HomeViewUrls &&
-                    HomeViewUrls.map((image, index) => (
-                      <div key={index} className="home-slider text-center">
-                        <div>
-                          <span className="img-type">{image.text}</span>
+                <form onSubmit={handleSubmit}>
+                  <Carousel
+                    responsive={responsive}
+                    dotListClass="custom-dot-list-style"
+                  >
+                    {HomeViewUrls &&
+                      HomeViewUrls.map((image, index) => (
+                        <div key={index} className="home-slider text-center">
+                          <div>
+                            <span className="img-type">{image.text}</span>
+                          </div>
+                          <img
+                            id="uploaded-image"
+                            src={image.url}
+                            alt="Uploaded Image"
+                            style={{
+                              width: "100%",
+                              height: "100%",
+                              objectFit: "cover",
+                              cursor: "pointer",
+                            }}
+                            className={
+                              uploadedImageIndexs.includes(index)
+                                ? "uploaded"
+                                : ""
+                            }
+                            onClick={() => showDrawer(image.text, index)}
+                          />
                         </div>
-                        <img
-                          id="uploaded-image"
-                          src={image.url}
-                          alt="Uploaded Image"
-                          style={{
-                            width: "100%",
-                            height: "100%",
-                            objectFit: "cover",
-                            cursor: "pointer",
-                          }}
-                          className={
-                            uploadedImageIndexs.includes(index)
-                              ? "uploaded"
-                              : ""
-                          }
-                          onClick={() => showDrawer(image.text, index)}
-                        />
-                      </div>
-                    ))}
-                </Carousel>
-                {not_image_upload && (
-                  <Alert type="error" message="Please Upload Images" banner />
-                )}
-                <div className="d-flex justify-content-center align-items-center mt-3">
-                  {loading ? (
-                    <Spin />
-                  ) : (
-                    <button type="submit" className="sbmt-btn">
-                      Submit and Upload
-                    </button>
+                      ))}
+                  </Carousel>
+                  {not_image_upload && (
+                    <Alert type="error" message="Please Upload Images" banner />
                   )}
-                </div>
-              </form>
-            </div>
-          )}
-        </div>
-      </div>
-
-      <Drawer
-        placement="bottom"
-        height={130}
-        onClose={onClose}
-        open={open}
-        headerStyle={{ display: "none" }}
-        closeIcon={null}
-        extra={<Space />}
-        className="upload-file-drawer"
-      >
-        <div>
-          <h5 className="text-center">Choose an Action</h5>
-          <div className="d-flex">
-            <div className="upload-btns">
-              <div className="cam-btn text-center">
-                <FaCamera
-                  size={35}
-                  onClick={() => triggerFileInput("camera")}
-                />
+                  <div className="d-flex justify-content-center align-items-center mt-3">
+                    {loading ? (
+                      <Spin />
+                    ) : (
+                      <button type="submit" className="sbmt-btn">
+                        Submit and Upload
+                      </button>
+                    )}
+                  </div>
+                </form>
               </div>
-              <div className="text-center">Camera</div>
-            </div>
-            <div className="upload-btns">
-              <div className="cam-btn text-center">
-                <ImFolderUpload
-                  size={35}
-                  onClick={() => triggerFileInput("files")}
-                />
-              </div>
-              <div className="text-center">Files</div>
-            </div>
+            )}
           </div>
         </div>
-      </Drawer>
-      <input
-        type="file"
-        id="upload-btn"
-        accept="image/*"
-        capture={selectedType}
-        // multiple
-        style={{ display: "none" }}
-        onChange={handleFileChange}
-      />
-    </div>
+
+        <Drawer
+          placement="bottom"
+          height={130}
+          onClose={onClose}
+          open={open}
+          headerStyle={{ display: "none" }}
+          closeIcon={null}
+          extra={<Space />}
+          className="upload-file-drawer"
+        >
+          <div>
+            <h5 className="text-center">Choose an Action</h5>
+            <div className="d-flex">
+              <div className="upload-btns">
+                <div className="cam-btn text-center">
+                  <FaCamera
+                    size={35}
+                    onClick={() => triggerFileInput("camera")}
+                  />
+                </div>
+                <div className="text-center">Camera</div>
+              </div>
+              <div className="upload-btns">
+                <div className="cam-btn text-center">
+                  <ImFolderUpload
+                    size={35}
+                    onClick={() => triggerFileInput("files")}
+                  />
+                </div>
+                <div className="text-center">Files</div>
+              </div>
+            </div>
+          </div>
+        </Drawer>
+        <input
+          type="file"
+          id="upload-btn"
+          accept="image/*"
+          capture={selectedType}
+          // multiple
+          style={{ display: "none" }}
+          onChange={handleFileChange}
+        />
+      </div>
+    </>
   );
 };
 

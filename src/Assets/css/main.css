@@ -20,6 +20,10 @@
   background-color: green;
 }
 
+.react-multiple-carousel__arrow {
+  margin-top: 15px !important;
+}
+
 .home-slider .uploaded-success {
   border: 0.3px solid rgb(116, 113, 113);
   height: 125px;

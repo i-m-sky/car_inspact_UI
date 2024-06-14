@@ -20,6 +20,7 @@ const App = () => {
     const token = params.get("inspection");
     if (!token) {
       setInspectionToken(false);
+      setTokenVerifying(false);
       return;
     }
     try {
@@ -32,22 +33,9 @@ const App = () => {
       }
     } catch (e) {
       setInspectionToken(false);
+      setTokenVerifying(false);
     }
   };
-
-  // useEffect(() => {
-  //   verifyToken();
-  //   const handleResize = () => {
-  //     setIsMobile(window.innerWidth < 1000);
-  //   };
-  //   handleResize();
-
-  //   window.addEventListener("resize", handleResize);
-
-  //   return () => {
-  //     window.removeEventListener("resize", handleResize);
-  //   };
-  // }, []);
 
   useEffect(() => {
     verifyToken();
@@ -72,36 +60,36 @@ const App = () => {
 
   return (
     <>
-      {token_verifying ? (
-        <>
-          <Spin
-            fullscreen={true}
-            tip={<span className="custom-tip">Verifying Token...</span>}
-            indicator={
-              <LoadingOutlined
-                style={{
-                  fontSize: 100,
-                }}
-                spin
+      {isMobile ? (
+        screenType === "l" ? (
+          token_verifying ? (
+            <>
+              <Spin
+                fullscreen={true}
+                tip={<span className="custom-tip">Verifying Token...</span>}
+                indicator={
+                  <LoadingOutlined
+                    style={{
+                      fontSize: 100,
+                    }}
+                    spin
+                  />
+                }
+                style={{ backgroundColor: "white" }}
               />
-            }
-            style={{ backgroundColor: "white" }}
-          />
-        </>
-      ) : inspectionToken ? (
-        isMobile ? (
-          screenType === "l" ? (
+            </>
+          ) : inspectionToken ? (
             <Routes />
           ) : (
-            <NotSupportScreenMode />
+            <div>
+              <p>Invalid Token</p>
+            </div>
           )
         ) : (
-          <DesktopView />
+          <NotSupportScreenMode />
         )
       ) : (
-        <div>
-          <p>Error: Token is expired or invalid </p>
-        </div>
+        <DesktopView />
       )}
     </>
   );

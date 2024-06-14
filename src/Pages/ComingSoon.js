@@ -5,7 +5,7 @@ const ComingSoon = () => {
   const [countdown, setCountdown] = useState("");
 
   useEffect(() => {
-    const countDownDate = new Date("August 1, 2024 00:00:00").getTime();
+    const countDownDate = new Date("August 15, 2024 00:00:00").getTime();
 
     const intervalId = setInterval(() => {
       const now = new Date().getTime();
