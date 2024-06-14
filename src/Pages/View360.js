@@ -70,6 +70,7 @@ const View360 = () => {
   const navigate = useNavigate();
   const [inspectionToken, setInspectionToken] = useState(false);
   const [inspection, setInspection] = useState("");
+  const [main_index, setMainIndex] = useState(null);
 
   const showDrawer = (view, index) => {
     setCurrentIndex(index);
@@ -110,9 +111,11 @@ const View360 = () => {
     }
   };
 
-  const handleSubmit = (e) => {
-    navigate("/?inspection=" + inspection, { state: { view360: images } });
-  };
+  useEffect(() => {
+    const params = new URLSearchParams(window.location.search);
+    const index = params.get("current_index");
+    setMainIndex(index);
+  }, []);
 
   const verifyInspectionToken = async () => {
     const params = new URLSearchParams(window.location.search);
@@ -130,6 +133,12 @@ const View360 = () => {
     } catch (e) {
       setInspectionToken(false);
     }
+  };
+
+  const handleSubmit = (e) => {
+    navigate("/?inspection=" + inspection, {
+      state: { view360: images, currentIndex: main_index },
+    });
   };
 
   useEffect(() => {

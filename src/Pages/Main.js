@@ -1,9 +1,9 @@
 import React, { useEffect, useRef, useState } from "react";
-import { Drawer, Space } from "antd";
+import { Alert, Drawer, Space } from "antd";
 import { FaCamera } from "react-icons/fa";
 import { ImFolderUpload } from "react-icons/im";
 import Carousel from "react-multi-carousel";
-import Image360 from "../Assets/images/360.png";
+import Image360 from "../Assets/images/360.jpg";
 import VIN from "../Assets/images/Vin.jpeg";
 import Odometer from "../Assets/images/odometer.jpeg";
 import Damage from "../Assets/images/Carscan.jpeg";
@@ -36,7 +36,7 @@ const responsive = {
 
 const HomeViewUrls = [
   {
-    text: "Images Capture",
+    text: "View 360",
     url: Image360,
     uploaded: false,
   },
@@ -76,6 +76,7 @@ const Main = () => {
   const navigate = useNavigate();
   const location = useLocation();
   const [inspectionToken, setInspectionToken] = useState("");
+  const [not_image_upload, setNotImageUpload] = useState(false);
 
   const getInspectionToken = async () => {
     const params = new URLSearchParams(window.location.search);
@@ -91,8 +92,10 @@ const Main = () => {
 
   const showDrawer = (view, index) => {
     setCurrentIndex(index);
-    if (view == "Images Capture") {
-      navigate("/view360?inspection=" + inspectionToken);
+    if (view == "View 360") {
+      navigate(
+        "/view360?inspection=" + inspectionToken + "&current_index=" + index
+      );
       setCurrentView(view);
       return;
     }
@@ -131,6 +134,18 @@ const Main = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
+
+    if (
+      Object.keys(images).length < 1 &&
+      Object.keys(location?.state?.view360 ?? {}).length < 1
+    ) {
+      setNotImageUpload(true);
+      setTimeout(() => {
+        setNotImageUpload(true);
+      }, 5000);
+      return;
+    }
+
     setScannerLoader(true);
 
     const formData = new FormData();
@@ -167,7 +182,15 @@ const Main = () => {
   };
 
   useEffect(() => {
-    // console.log(location.state.view360);
+    if (
+      location?.state?.currentIndex &&
+      Object.keys(location?.state?.view360 ?? {}).length > 0
+    ) {
+      setUploadedImageIndex((uploadedImageIndexs) => [
+        ...uploadedImageIndexs,
+        Number(location?.state?.currentIndex),
+      ]);
+    }
   }, []);
 
   return (
@@ -214,7 +237,10 @@ const Main = () => {
                       </div>
                     ))}
                 </Carousel>
-                <div className="d-flex justify-content-center align-items-center">
+                {not_image_upload && (
+                  <Alert type="error" message="Please Upload Images" banner />
+                )}
+                <div className="d-flex justify-content-center align-items-center mt-3">
                   {loading ? (
                     <Spin />
                   ) : (
@@ -227,13 +253,6 @@ const Main = () => {
             </div>
           )}
         </div>
-
-        {checkedImages &&
-          Object.entries(checkedImages).map(([key, value]) => (
-            <div className="col-4 mt-5 mb-3">
-              <Image width={200} src={value.checked_image_path} />
-            </div>
-          ))}
       </div>
 
       <Drawer

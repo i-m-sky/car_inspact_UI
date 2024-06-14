@@ -49,8 +49,8 @@
 @media only screen and (min-width: 600px) {
   .slider img {
     border: 1px solid rgb(116, 113, 113) !important;
-    height: 120px !important;
-    width: 120px !important;
+    height: 100px !important;
+    width: 100px !important;
     padding: 15px !important;
     border-radius: 10px !important;
   }
@@ -59,7 +59,7 @@
     font-weight: 700;
   }
   .img-type {
-    font-size: 15;
+    font-size: 14;
     font-weight: 600;
   }
 }

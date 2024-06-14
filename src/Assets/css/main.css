@@ -11,6 +11,11 @@
   border-radius: 10px;
 }
 
+.custom-tip {
+  color: black !important;
+  font-weight: 500;
+}
+
 .uploaded {
   background-color: green;
 }
@@ -49,9 +54,9 @@
 @media only screen and (min-width: 600px) {
   .home-slider img {
     border: 1px solid rgb(116, 113, 113) !important;
-    height: 120px !important;
-    width: 120px !important;
-    padding: 5px !important;
+    height: 100px !important;
+    width: 100px !important;
+    padding: 4.5px !important;
     border-radius: 10px !important;
   }
   .main-heading {
