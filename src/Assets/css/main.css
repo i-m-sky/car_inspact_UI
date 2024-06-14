@@ -11,6 +11,11 @@
   border-radius: 10px;
 }
 
+.slick-prev {
+  z-index: 999 !important;
+  background-color: red !important;
+}
+
 .custom-tip {
   color: black !important;
   font-weight: 500;
