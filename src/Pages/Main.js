@@ -61,6 +61,7 @@ const Camera = () => {
   const location = useLocation();
   const [inspectionToken, setInspectionToken] = useState("");
   const [not_image_upload, setNotImageUpload] = useState(false);
+  const [customMsg, setCustomMsg] = useState("Please Upload Images");
   const formRef = useRef(null); // Create a ref for the form
 
   const getInspectionToken = async () => {
@@ -227,16 +228,26 @@ const Camera = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-
     if (
       Object.keys(images).length < 1 &&
       Object.keys(location?.state?.view360 ?? {}).length < 1
     ) {
       setNotImageUpload(true);
       setTimeout(() => {
-        setNotImageUpload(true);
+        setNotImageUpload(false);
       }, 5000);
       return;
+    }
+
+    if (
+      !Object.keys(images).includes("VIN") &&
+      !Object.keys(images).includes("Odometer")
+    ) {
+      setCustomMsg("Please Upload One Image Either VIN or Odometer");
+      setNotImageUpload(true);
+      setTimeout(() => {
+        setNotImageUpload(false);
+      }, 5000);
     }
 
     setScannerLoader(true);
@@ -366,7 +377,7 @@ const Camera = () => {
                 </span>
               </div>
               {not_image_upload && (
-                <Alert type="error" message="Please Upload Images" banner />
+                <Alert type="error" message={customMsg} banner />
               )}
               <div className="text-center">
                 {loading ? (

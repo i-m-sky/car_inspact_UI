@@ -109,8 +109,7 @@ const View360 = () => {
         $(this).parent().attr("id", `MultiCarousel${id}`);
 
         if (bodyWidth < 768) {
-          // Show 3 items when width is less than 768px
-          incno = itemsSplit[1]; // Index 1 corresponds to 3 items
+          incno = itemsSplit[1];
           itemWidth = sampwidth / incno;
         } else if (bodyWidth >= 768 && bodyWidth < 992) {
           incno = itemsSplit[1]; // Show 3 items
