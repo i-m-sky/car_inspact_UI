@@ -2,7 +2,7 @@ import "../Assets/css/loadingBar.css";
 const LoadingBar = () => {
   return (
     <>
-      <div class="loader">Model Loading...</div>
+      <div className="loader">Model Loading...</div>
     </>
   );
 };

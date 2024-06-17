@@ -10,8 +10,25 @@
   padding: 20px;
   border-radius: 10px;
 }
+.slider-container {
+  justify-content: center !important;
+  align-items: center !important;
+  margin-top: 50px;
+}
+.slick-prev {
+  left: 0px !important;
+}
 
 .slick-prev {
+  z-index: 999 !important;
+  background-color: red !important;
+}
+
+.slick-next {
+  left: 0px !important;
+}
+
+.slick-next {
   z-index: 999 !important;
   background-color: red !important;
 }
@@ -22,7 +39,7 @@
 }
 
 .uploaded {
-  background-color: green;
+  border: 5px solid green !important;
 }
 
 .react-multiple-carousel__arrow {
@@ -48,7 +65,7 @@
   left: 0;
 }
 .sbmt-btn {
-  width: 250px;
+  width: 300px;
   padding: 8px;
   border: none;
   background: #147614eb;
@@ -56,8 +73,8 @@
   font-size: 1000;
   font-weight: 600;
   cursor: pointer;
-  height: 40px;
-  border-radius: 3px;
+  height: 50px;
+  border-radius: 1px;
 }
 
 @media only screen and (min-width: 600px) {

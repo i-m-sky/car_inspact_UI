@@ -1,43 +1,46 @@
-.carousel {
-  position: relative;
-  width: 100%;
+/* custom-multi-carousel.css */
+.MultiCarousel {
+  float: left;
   overflow: hidden;
-}
-
-.slides {
-  display: flex;
-  transition: transform 0.5s ease;
-}
-
-.slide {
-  flex: 0 0 100%;
-}
-
-.slide img {
+  padding: 15px;
   width: 100%;
-  height: auto;
+  position: relative;
 }
 
-.active {
-  opacity: 1;
+.MultiCarousel .MultiCarousel-inner {
+  transition: 1s ease all;
+  float: left;
 }
 
-.prev,
-.next {
+.MultiCarousel .MultiCarousel-inner .item {
+  float: left;
+}
+
+.MultiCarousel .MultiCarousel-inner .item > div {
+  text-align: center;
+  padding: 10px;
+  margin: 10px;
+  background: #f1f1f1;
+  color: #666;
+}
+
+.MultiCarousel .leftLst,
+.MultiCarousel .rightLst {
   position: absolute;
-  top: 50%;
-  transform: translateY(-50%);
-  background-color: rgba(255, 255, 255, 0.5);
-  border: none;
-  color: black;
-  font-size: 24px;
-  cursor: pointer;
+  border-radius: 50%;
+  top: calc(50% - 20px);
 }
 
-.prev {
+.MultiCarousel .leftLst {
   left: 0;
 }
 
-.next {
+.MultiCarousel .rightLst {
   right: 0;
+}
+
+.MultiCarousel .leftLst.over,
+.MultiCarousel .rightLst.over {
+  pointer-events: none;
+  background: #ccc;
 }
