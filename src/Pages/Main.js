@@ -15,7 +15,6 @@ import {
 import { Alert, Drawer, Space } from "antd";
 import { FaCamera } from "react-icons/fa";
 import { ImFolderUpload } from "react-icons/im";
-import "react-multi-carousel/lib/styles.css";
 import "../Assets/css/main.css";
 import { GetApi, PostApi } from "../Services/Service";
 import { Image, Spin, Button, message } from "antd";
@@ -453,7 +452,6 @@ export default Camera;
 // import Odometer from "../Assets/images/odometer.jpeg";
 // import Damage from "../Assets/images/Carscan.jpeg";
 // import NumberPlate from "../Assets/images/Number.jpeg";
-// import "react-multi-carousel/lib/styles.css";
 // import "../Assets/css/main.css";
 // import { GetApi, PostApi } from "../Services/Service";
 // import { Image, Spin, Button, message } from "antd";

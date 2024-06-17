@@ -390,7 +390,6 @@ export default View360;
 // import CarBack from "../Assets/images/CarBack.png";
 // import FrontWindshield from "../Assets/images/FrontWindshield.png";
 // import BackWindshield from "../Assets/images/BackWindshield.png";
-// import "react-multi-carousel/lib/styles.css";
 // import "../Assets/css/view360.css";
 // import { Image, Spin } from "antd";
 // import { useNavigate } from "react-router-dom";

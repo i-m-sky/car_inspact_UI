@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from "react";
-import "react-multi-carousel/lib/styles.css";
 import "../node_modules/bootstrap/dist/css/bootstrap.min.css";
 import DesktopView from "./components/Desktop/Desktop";
 import useScreenOrientation from "./hooks/useScreenOrientation";
