@@ -248,6 +248,7 @@ const Camera = () => {
       setTimeout(() => {
         setNotImageUpload(false);
       }, 5000);
+      return;
     }
 
     setScannerLoader(true);
