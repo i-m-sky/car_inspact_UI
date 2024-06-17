@@ -12,14 +12,11 @@ import { ImFolderUpload } from "react-icons/im";
 import { Spin, Button, message } from "antd";
 import { useNavigate } from "react-router-dom";
 import { useLocation } from "react-router-dom";
-import Carousel from "react-multi-carousel";
 import CarFront from "../Assets/images/CarFront.png";
 import CarBack from "../Assets/images/CarBack.png";
-import FrontWindshield from "../Assets/images/FrontWindshield.png";
-import BackWindshield from "../Assets/images/BackWindshield.png";
-import "react-multi-carousel/lib/styles.css";
+import FrontWindshield from "../Assets/images/FrontWindShield.png";
+import BackWindshield from "../Assets/images/BackWindShield.png";
 import "../Assets/css/view360.css";
-import LoadingBar from "../components/LoadingBar";
 import Auth from "../Services/Auth";
 
 const View360 = () => {
@@ -34,14 +31,15 @@ const View360 = () => {
       url: CarBack,
       uploaded: false,
     },
-    {
-      text: "FrontWindshield",
-      url: FrontWindshield,
-      uploaded: false,
-    },
+
     {
       text: "BackWindshield",
       url: BackWindshield,
+      uploaded: false,
+    },
+    {
+      text: "FrontWindshield",
+      url: FrontWindshield,
       uploaded: false,
     },
   ];
@@ -55,12 +53,10 @@ const View360 = () => {
   const containerRef = useRef(null);
   const [scannerLoader, setScannerLoader] = useState(false);
   const [images, setImages] = useState({});
-  const [checkedImages, setCheckedImages] = useState(null);
   const navigate = useNavigate();
   const location = useLocation();
   const [inspectionToken, setInspectionToken] = useState("");
   const [not_image_upload, setNotImageUpload] = useState(false);
-  const formRef = useRef(null); // Create a ref for the form
   const [main_index, setMainIndex] = useState(null);
   const [inspection, setInspection] = useState("");
   const [loadingBar, setLoadingBar] = useState(true);
@@ -266,8 +262,8 @@ const View360 = () => {
 
   return (
     <>
-  
-        <div className="container-fluid">
+      <div className="container-fluid">
+
           <div className="row">
             <form onSubmit={handleSubmit}>
               <p className="mt-3 text-dark">
@@ -304,7 +300,7 @@ const View360 = () => {
                           cursor: "pointer",
                           border: "1.5px solid #cec0c0",
                           borderRadius: "10px",
-                          padding: "25px",
+                          padding: "18px",
                         }}
                         className={
                           uploadedImageIndexs.includes(index)
@@ -339,50 +335,48 @@ const View360 = () => {
               </div>
             </form>
           </div>
-
-          <Drawer
-            placement="bottom"
-            height={130}
-            onClose={onClose}
-            open={open}
-            closeIcon={null}
-            extra={<Space />}
-            className="upload-file-drawer"
-          >
-            <div>
-              <h5 className="text-center">Choose an Action</h5>
-              <div className="d-flex">
-                <div className="upload-btns">
-                  <div className="cam-btn text-center">
-                    <FaCamera
-                      size={35}
-                      onClick={() => triggerFileInput("camera")}
-                    />
-                  </div>
-                  <div className="text-center">Camera</div>
+        <Drawer
+          placement="bottom"
+          height={130}
+          onClose={onClose}
+          open={open}
+          closeIcon={null}
+          extra={<Space />}
+          className="upload-file-drawer"
+        >
+          <div>
+            <h5 className="text-center">Choose an Action</h5>
+            <div className="d-flex">
+              <div className="upload-btns">
+                <div className="cam-btn text-center">
+                  <FaCamera
+                    size={35}
+                    onClick={() => triggerFileInput("camera")}
+                  />
                 </div>
-                <div className="upload-btns">
-                  <div className="cam-btn text-center">
-                    <ImFolderUpload
-                      size={35}
-                      onClick={() => triggerFileInput("files")}
-                    />
-                  </div>
-                  <div className="text-center">Files</div>
+                <div className="text-center">Camera</div>
+              </div>
+              <div className="upload-btns">
+                <div className="cam-btn text-center">
+                  <ImFolderUpload
+                    size={35}
+                    onClick={() => triggerFileInput("files")}
+                  />
                 </div>
+                <div className="text-center">Files</div>
               </div>
             </div>
-          </Drawer>
-          <input
-            type="file"
-            id="upload-btn"
-            accept="image/*"
-            capture={selectedType}
-            style={{ display: "none" }}
-            onChange={handleFileChange}
-          />
-        </div>
-    
+          </div>
+        </Drawer>
+        <input
+          type="file"
+          id="upload-btn"
+          accept="image/*"
+          capture={selectedType}
+          style={{ display: "none" }}
+          onChange={handleFileChange}
+        />
+      </div>
     </>
   );
 };

@@ -311,72 +311,76 @@ const Camera = () => {
       {contextHolder}
       <div className="container-fluid">
         <div className="row">
-          <form onSubmit={handleSubmit}>
-            <p className="mt-3 text-dark">
-              <strong>
-                Please upload images by clicking on the sections below to start
-                the inspection.
-              </strong>
-            </p>
-            <div
-              className="MultiCarousel"
-              data-items="4,3,5,6"
-              data-slide="1"
-              id="MultiCarousel"
-              data-interval="1000"
-            >
-              <div className="MultiCarousel-inner">
-                {Scanned_Types.map((image, index) => (
-                  <div
-                    key={index}
-                    className="item text-center w-25"
-                    style={{ lineHeight: "1px" }}
-                  >
-                    <p className="text-dark">
-                      <strong>{image.text}</strong>
-                    </p>
-                    <img
-                      id="uploaded-image"
-                      src={image.url}
-                      alt={image.text}
-                      style={{
-                        width: "60%",
-                        aspectRatio: "1 / 1",
-                        objectFit: "cover",
-                        cursor: "pointer",
-                        border: "1.5px solid #cec0c0",
-                        borderRadius: "10px",
-                      }}
-                      className={
-                        uploadedImageIndexs.includes(index) ? "uploaded" : ""
-                      }
-                      onClick={() => showDrawer(image.text, index)}
-                    />
-                  </div>
-                ))}
+          {scannerLoader ? (
+            <ScannerLoader />
+          ) : (
+            <form onSubmit={handleSubmit}>
+              <p className="mt-3 text-dark">
+                <strong>
+                  Please upload images by clicking on the sections below to
+                  start the inspection.
+                </strong>
+              </p>
+              <div
+                className="MultiCarousel"
+                data-items="4,3,5,6"
+                data-slide="1"
+                id="MultiCarousel"
+                data-interval="1000"
+              >
+                <div className="MultiCarousel-inner">
+                  {Scanned_Types.map((image, index) => (
+                    <div
+                      key={index}
+                      className="item text-center w-25"
+                      style={{ lineHeight: "1px" }}
+                    >
+                      <p className="text-dark">
+                        <strong>{image.text}</strong>
+                      </p>
+                      <img
+                        id="uploaded-image"
+                        src={image.url}
+                        alt={image.text}
+                        style={{
+                          width: "60%",
+                          aspectRatio: "1 / 1",
+                          objectFit: "cover",
+                          cursor: "pointer",
+                          border: "1.5px solid #cec0c0",
+                          borderRadius: "10px",
+                        }}
+                        className={
+                          uploadedImageIndexs.includes(index) ? "uploaded" : ""
+                        }
+                        onClick={() => showDrawer(image.text, index)}
+                      />
+                    </div>
+                  ))}
+                </div>
+                <span className="leftLst">
+                  <MdOutlineKeyboardDoubleArrowLeft size={50} />
+                </span>
+                <span className="rightLst">
+                  <MdOutlineKeyboardDoubleArrowRight size={50} />
+                </span>
               </div>
-              <span className="leftLst">
-                <MdOutlineKeyboardDoubleArrowLeft size={50} />
-              </span>
-              <span className="rightLst">
-                <MdOutlineKeyboardDoubleArrowRight size={50} />
-              </span>
-            </div>
-            {not_image_upload && (
-              <Alert type="error" message="Please Upload Images" banner />
-            )}
-            <div className="text-center">
-              {loading ? (
-                <Spin />
-              ) : (
-                <>
-                  <button type="submit" className="sbmt-btn mt-3">
-                    Submit and Upload
-                  </button>
-                </>
+              {not_image_upload && (
+                <Alert type="error" message="Please Upload Images" banner />
               )}
-            </div>
-          </form>
+              <div className="text-center">
+                {loading ? (
+                  <Spin />
+                ) : (
+                  <>
+                    <button type="submit" className="sbmt-btn mt-3">
+                      Upload and Submit
+                    </button>
+                  </>
+                )}
+              </div>
+            </form>
+          )}
         </div>
 
         <Drawer
