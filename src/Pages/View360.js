@@ -22,6 +22,7 @@ import LeftRearWindow from "../Assets/images/LRW.jpg";
 import LeftFrontWindow from "../Assets/images/RFW.jpg";
 import "../Assets/css/view360.css";
 import Auth from "../Services/Auth";
+import { PostApi } from "../Services/Service";
 
 const View360 = () => {
   const Scanned_Types = [
@@ -79,6 +80,7 @@ const View360 = () => {
   const navigate = useNavigate();
   const location = useLocation();
   const [inspectionToken, setInspectionToken] = useState("");
+  const [isVerifyInspectionToken, setIsVerifyInspectionToken] = useState("");
   const [not_image_upload, setNotImageUpload] = useState(false);
   const [main_index, setMainIndex] = useState(null);
   const [inspection, setInspection] = useState("");
@@ -243,24 +245,65 @@ const View360 = () => {
     const token = params.get("inspection");
     setInspection(token);
     if (!token) {
-      setInspectionToken(false);
+      setIsVerifyInspectionToken(false);
       return;
     }
     try {
       const res = await Auth.verify_inpection_token(token);
       if (res.data.status) {
-        setInspectionToken(true);
+        setIsVerifyInspectionToken(true);
       }
     } catch (e) {
-      setInspectionToken(false);
+      setIsVerifyInspectionToken(false);
     }
   };
 
+  // const handleSubmit = (e) => {
+  //   // upload-360view
+  //   e.preventDefault();
+  //   navigate("/?inspection=" + inspection, {
+  //     state: { view360: images, currentIndex: main_index },
+  //   });
+  // };
+
   const handleSubmit = (e) => {
     e.preventDefault();
-    navigate("/?inspection=" + inspection, {
-      state: { view360: images, currentIndex: main_index },
-    });
+
+    setLoading(true);
+
+    if (Object.keys(images).length < 1) {
+      alert("Please upload an image");
+      setLoading(false);
+      return;
+    }
+    const formData = new FormData();
+
+    for (const [label, files] of Object.entries(images)) {
+      files.forEach((file, index) => {
+        formData.append(`${label}`, file);
+      });
+    }
+
+    PostApi("/upload-360view?inspection=" + inspectionToken, formData, {
+      headers: {
+        "Content-Type": "multipart/form-data",
+      },
+    })
+      .then((res) => {
+        if (res.status) {
+          setLoading(false);
+          navigate("/?inspection=" + inspection, {
+            state: { view360: images, currentIndex: main_index },
+          });
+        } else {
+          alert("Something went wrong please upload again");
+        }
+      })
+      .catch((err) => {
+        setLoading(false);
+        alert("Something went wrong please upload again");
+        console.log(err);
+      });
   };
 
   useEffect(() => {
@@ -295,7 +338,13 @@ const View360 = () => {
                     className="item text-center"
                     style={{ lineHeight: "1px" }}
                   >
-                    <p className="text-dark">
+                    <p
+                      className={
+                        uploadedImageIndexs.includes(index)
+                          ? "uploaded_360-text-color"
+                          : "text-dark"
+                      }
+                    >
                       <strong>{image.text}</strong>
                     </p>
                     <img
@@ -303,7 +352,7 @@ const View360 = () => {
                       src={image.url}
                       alt={image.text}
                       style={{
-                        width: "90%",
+                        width: "70%",
                         aspectRatio: "1 / 1",
                         objectFit: "cover",
                         cursor: "pointer",

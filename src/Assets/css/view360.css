@@ -10,7 +10,9 @@
   padding: 20px;
   border-radius: 10px;
 }
-
+.uploaded_360-text-color{
+  color:green
+}
 .slider .uploaded_360 {
   border: 6px solid rgb(48 166 48) !important;
 }

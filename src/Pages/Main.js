@@ -185,6 +185,12 @@ const Camera = () => {
 
   const showDrawer = (view, index) => {
     setCurrentIndex(index);
+    // if (
+    //   view === "View 360" &&
+    //   Object.keys(location?.state?.view360 ?? {}).length > 0
+    // ) {
+    //   return;
+    // }
     if (view === "View 360") {
       navigate(
         "/view360?inspection=" + inspectionToken + "&current_index=" + index
