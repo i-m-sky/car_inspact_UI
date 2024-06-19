@@ -13,6 +13,7 @@ const App = () => {
   const [isMobile, setIsMobile] = useState(false);
   const [inspectionToken, setInspectionToken] = useState(false);
   const [token_verifying, setTokenVerifying] = useState(true);
+  const [token_message, setTokenMessage] = useState("Invalid token");
 
   const verifyToken = async () => {
     const params = new URLSearchParams(window.location.search);
@@ -28,9 +29,11 @@ const App = () => {
         setInspectionToken(true);
         setTokenVerifying(false);
       } else {
+        setTokenMessage(res.data.message);
         setTokenVerifying(false);
       }
     } catch (e) {
+      setTokenMessage("Token verification falid");
       setInspectionToken(false);
       setTokenVerifying(false);
     }
@@ -81,7 +84,7 @@ const App = () => {
             <Routes />
           ) : (
             <div>
-              <p>Invalid Token</p>
+              <p>{token_message}</p>
             </div>
           )
         ) : (
