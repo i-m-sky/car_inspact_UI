@@ -26,7 +26,9 @@ const useScreenOrientation = () => {
     };
   }, [landscape]);
 
-  return landscape ? "landscape" : "portrait";
+  console.log(landscape, "landscape");
+
+  return landscape ? "l" : "p";
 };
 
 export default useScreenOrientation;

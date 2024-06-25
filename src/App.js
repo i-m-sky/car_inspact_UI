@@ -45,21 +45,22 @@ const App = () => {
 
   useEffect(() => {
     console.log(screenType, "screenType");
+
     const handleResize = () => {
       setIsMobile(window.innerWidth < 1000);
     };
 
-    const handleOrientationChange = () => {
-      setIsMobile(window.innerWidth < 1000);
-    };
+    // const handleOrientationChange = () => {
+    //   setIsMobile(window.innerWidth < 1000);
+    // };
 
     handleResize();
     window.addEventListener("resize", handleResize);
-    window.addEventListener("orientationchange", handleOrientationChange);
-
+    // window.addEventListener("orientationchange", handleOrientationChange);
+    console.log(isMobile, "isMobile");
     return () => {
       window.removeEventListener("resize", handleResize);
-      window.removeEventListener("orientationchange", handleOrientationChange);
+      // window.removeEventListener("orientationchange", handleOrientationChange);
     };
   }, [screenType]);
 
