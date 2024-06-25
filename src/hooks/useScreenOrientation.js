@@ -21,7 +21,7 @@ const useScreenOrientation = () => {
     // window.addEventListener("resize", updateOrientation);
 
     return () => {
-      window.removeEventListener("orientationchange", updateOrientation);
+      // window.removeEventListener("orientationchange", updateOrientation);
       // window.removeEventListener("resize", updateOrientation);
     };
   }, [landscape]);
