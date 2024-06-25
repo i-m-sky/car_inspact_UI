@@ -18,11 +18,11 @@ const useScreenOrientation = () => {
 
   useEffect(() => {
     window.addEventListener("orientationchange", updateOrientation);
-    window.addEventListener("resize", updateOrientation);
+    // window.addEventListener("resize", updateOrientation);
 
     return () => {
       window.removeEventListener("orientationchange", updateOrientation);
-      window.removeEventListener("resize", updateOrientation);
+      // window.removeEventListener("resize", updateOrientation);
     };
   }, [landscape]);
 
