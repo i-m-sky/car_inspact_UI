@@ -85,6 +85,7 @@ const View360 = () => {
   const [main_index, setMainIndex] = useState(null);
   const [inspection, setInspection] = useState("");
   const [loadingBar, setLoadingBar] = useState(true);
+  const [cameraOpen, setCameraOpen] = useState(false);
 
   const getInspectionToken = async () => {
     const params = new URLSearchParams(window.location.search);
@@ -194,15 +195,25 @@ const View360 = () => {
 
   const showDrawer = (view, index) => {
     setCurrentIndex(index);
-    if (view === "View 360") {
-      navigate(
-        "/view360?inspection=" + inspectionToken + "&current_index=" + index
-      );
-      setCurrentView(view);
-    } else {
-      setCurrentView(view);
-      setOpen(true);
-    }
+
+    navigate(
+      "/capture?inspection=" +
+        inspectionToken +
+        "&current_index=" +
+        index +
+        "&view=" +
+        view
+    );
+
+    // if (view === "View 360") {
+    //   navigate(
+    //     "/view360?inspection=" + inspectionToken + "&current_index=" + index
+    //   );
+    //   setCurrentView(view);
+    // } else {
+    //   setCurrentView(view);
+    //   setOpen(true);
+    // }
   };
 
   const onClose = () => setOpen(false);
