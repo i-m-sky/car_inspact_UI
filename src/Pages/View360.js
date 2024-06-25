@@ -208,6 +208,7 @@ const View360 = () => {
   const onClose = () => setOpen(false);
 
   const handleFileChange = (event) => {
+    event.preventDefault();
     const files = event.target.files[0];
     setImages((prevImages) => ({
       ...prevImages,
@@ -302,7 +303,6 @@ const View360 = () => {
       .catch((err) => {
         setLoading(false);
         alert("Something went wrong please upload again");
-        console.log(err);
       });
   };
 

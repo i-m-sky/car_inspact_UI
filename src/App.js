@@ -41,7 +41,10 @@ const App = () => {
 
   useEffect(() => {
     verifyToken();
+  }, []);
 
+  useEffect(() => {
+    console.log(screenType, "screenType");
     const handleResize = () => {
       setIsMobile(window.innerWidth < 1000);
     };
@@ -58,7 +61,7 @@ const App = () => {
       window.removeEventListener("resize", handleResize);
       window.removeEventListener("orientationchange", handleOrientationChange);
     };
-  }, []);
+  }, [screenType]);
 
   return (
     <>

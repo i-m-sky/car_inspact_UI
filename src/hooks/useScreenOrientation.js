@@ -1,42 +1,32 @@
 import { useState, useEffect } from "react";
 
-const getOrientation = () => {
-  if (
-    window.screen &&
-    window.screen.orientation &&
-    window.screen.orientation.type
-  ) {
-    return window.screen.orientation.type;
+const isLandscape = () => {
+  if (window.screen && window.screen.orientation) {
+    return window.screen.orientation.type.startsWith("landscape");
+  } else if (typeof window.orientation === "number") {
+    return Math.abs(window.orientation) === 90;
   }
-  // Fallback for iOS
-  const angle = window.orientation;
-  switch (angle) {
-    case 0:
-    case 180:
-      return "portrait-primary";
-    case 90:
-    case -90:
-      return "landscape-primary";
-    default:
-      return "unknown";
-  }
+  return window.innerWidth > window.innerHeight;
 };
 
 const useScreenOrientation = () => {
-  const [orientation, setOrientation] = useState(getOrientation());
+  const [landscape, setLandscape] = useState(isLandscape());
 
   const updateOrientation = () => {
-    setOrientation(getOrientation());
+    setLandscape(isLandscape());
   };
 
   useEffect(() => {
     window.addEventListener("orientationchange", updateOrientation);
+    window.addEventListener("resize", updateOrientation);
+
     return () => {
       window.removeEventListener("orientationchange", updateOrientation);
+      window.removeEventListener("resize", updateOrientation);
     };
-  }, []);
+  }, [landscape]);
 
-  return orientation;
+  return landscape ? "landscape" : "portrait";
 };
 
 export default useScreenOrientation;

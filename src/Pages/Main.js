@@ -205,6 +205,7 @@ const Camera = () => {
   const onClose = () => setOpen(false);
 
   const handleFileChange = (event) => {
+    event.preventDefault();
     const files = event.target.files[0];
     setImages((prevImages) => ({
       ...prevImages,
@@ -287,12 +288,11 @@ const Camera = () => {
       })
       .catch((err) => {
         setScannerLoader(false);
-        console.log(err);
+        console.log("opps something went wrong");
       });
   };
 
   useEffect(() => {
-    console.log(location?.state?.currentIndex, location?.state?.view360);
     if (
       location?.state?.currentIndex &&
       Object.keys(location?.state?.view360 ?? {}).length > 0
