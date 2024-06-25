@@ -1,98 +1,24 @@
-import React, { useEffect } from "react";
-import Grid from "@material-ui/core/Grid";
-import { makeStyles } from "@material-ui/core/styles";
+import React from "react";
+import Camera from "react-html5-camera-photo";
+import "react-html5-camera-photo/build/css/index.css";
 
-const useStyles = makeStyles((theme) => ({
-  root: {
-    height: "100%",
-    textAlign: "center",
-  },
-  imgBox: {
-    maxWidth: "80%",
-    maxHeight: "80%",
-    margin: "10px",
-  },
-  img: {
-    height: "inherit",
-    maxWidth: "inherit",
-  },
-  input: {
-    display: "none",
-  },
-}));
+function Test(props) {
+  function handleTakePhoto(dataUri) {
+    console.log("Photo taken:", dataUri);
+  }
 
-function Test() {
-  const classes = useStyles();
-
-  let localstream;
-
-  useEffect(() => {
-    let vid = document.getElementById("vid");
-    if (navigator.mediaDevices.getUserMedia !== null) {
-      var options = {
-        video: {
-          facingMode: "environment",
-        },
-        audio: true,
-      };
-      navigator.getUserMedia(
-        options,
-        function (stream) {
-          vid.srcObject = stream;
-          localstream = stream;
-          vid.play();
-          console.log(stream, "streaming");
-        },
-        function (e) {
-          console.log("background error : " + e.name);
-        }
-      );
-    }
-  });
-
-  const capOff = () => {
-    let vid = document?.getElementById("vid");
-    if (vid) {
-      vid.pause();
-      vid.src = "";
-    }
-    localstream?.getTracks()?.forEach((x) => x.stop());
-    console.log("all capture devices off");
-  };
-
-  const camON = () => {
-    let vid = document.getElementById("vid");
-    if (navigator.mediaDevices.getUserMedia !== null) {
-      var options = {
-        video: true,
-        audio: true,
-      };
-      navigator.getUserMedia(
-        options,
-        function (stream) {
-          vid.srcObject = stream;
-          localstream = stream;
-          vid.play();
-          console.log(stream, "streaming");
-        },
-        function (e) {
-          console.log("background error : " + e.name);
-        }
-      );
-    }
-  };
+  function handleCameraError(error) {
+    console.error("Camera error:", error);
+  }
 
   return (
-    <div className={classes.root}>
-      <Grid container>
-        <Grid item xs={12}>
-          <video id="vid" height="200" width="300" autoPlay></video>
-          <br />
-          <button onClick={capOff}>Turn Capture Off</button>
-          <button onClick={camON}>Turn Capture ON</button>
-        </Grid>
-      </Grid>
-    </div>
+    <Camera
+      onTakePhoto={(dataUri) => handleTakePhoto(dataUri)}
+      onCameraError={(error) => handleCameraError(error)}
+      idealFacingMode="environment"
+      isImageMirror={false}
+    />
   );
 }
+
 export default Test;

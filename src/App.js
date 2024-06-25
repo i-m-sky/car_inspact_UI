@@ -14,6 +14,7 @@ const App = () => {
   const [inspectionToken, setInspectionToken] = useState(false);
   const [token_verifying, setTokenVerifying] = useState(true);
   const [token_message, setTokenMessage] = useState("Invalid token");
+  const [screenWidth, setScreenWidth] = useState(window.innerWidth);
 
   const verifyToken = async () => {
     const params = new URLSearchParams(window.location.search);
@@ -44,30 +45,14 @@ const App = () => {
   }, []);
 
   useEffect(() => {
-    console.log(screenType, "screenType");
-
-    const handleResize = () => {
-      setIsMobile(window.innerWidth < 1000);
-    };
-
-    // const handleOrientationChange = () => {
-    //   setIsMobile(window.innerWidth < 1000);
-    // };
-
-    handleResize();
-    window.addEventListener("resize", handleResize);
-    // window.addEventListener("orientationchange", handleOrientationChange);
-    console.log(isMobile, "isMobile");
-    return () => {
-      window.removeEventListener("resize", handleResize);
-      // window.removeEventListener("orientationchange", handleOrientationChange);
-    };
-  }, [screenType]);
+    console.log(screenWidth, "screenWidth");
+    setIsMobile(screenWidth < 1000);
+  }, [screenWidth]);
 
   return (
     <>
       {isMobile ? (
-        screenType === "l" ? (
+        screenType == "l" ? (
           token_verifying ? (
             <>
               <Spin

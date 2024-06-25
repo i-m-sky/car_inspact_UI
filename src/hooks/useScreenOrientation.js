@@ -10,25 +10,15 @@ const isLandscape = () => {
 };
 
 const useScreenOrientation = () => {
+  
   const [landscape, setLandscape] = useState(isLandscape());
 
-  const updateOrientation = () => {
-    setLandscape(isLandscape());
-  };
-
   useEffect(() => {
-    window.addEventListener("orientationchange", updateOrientation);
-    // window.addEventListener("resize", updateOrientation);
-
-    return () => {
-      // window.removeEventListener("orientationchange", updateOrientation);
-      // window.removeEventListener("resize", updateOrientation);
-    };
-  }, [landscape]);
-
-  console.log(landscape, "landscape");
+    setLandscape(isLandscape());
+  }, []);
 
   return landscape ? "l" : "p";
+
 };
 
 export default useScreenOrientation;
