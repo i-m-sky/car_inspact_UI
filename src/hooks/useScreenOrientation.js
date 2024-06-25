@@ -1,30 +1,42 @@
-import {useState, useEffect} from 'react'
+import { useState, useEffect } from "react";
 
-const getOrientation = () =>
-  window.screen.orientation.type
+const getOrientation = () => {
+  if (
+    window.screen &&
+    window.screen.orientation &&
+    window.screen.orientation.type
+  ) {
+    return window.screen.orientation.type;
+  }
+  // Fallback for iOS
+  const angle = window.orientation;
+  switch (angle) {
+    case 0:
+    case 180:
+      return "portrait-primary";
+    case 90:
+    case -90:
+      return "landscape-primary";
+    default:
+      return "unknown";
+  }
+};
 
 const useScreenOrientation = () => {
-  const [orientation, setOrientation] =
-    useState(getOrientation())
+  const [orientation, setOrientation] = useState(getOrientation());
 
-  const updateOrientation = event => {
-    setOrientation(getOrientation())
-  }
+  const updateOrientation = () => {
+    setOrientation(getOrientation());
+  };
 
   useEffect(() => {
-    window.addEventListener(
-      'orientationchange',
-      updateOrientation
-    )
+    window.addEventListener("orientationchange", updateOrientation);
     return () => {
-      window.removeEventListener(
-        'orientationchange',
-        updateOrientation
-      )
-    }
-  }, [])
+      window.removeEventListener("orientationchange", updateOrientation);
+    };
+  }, []);
 
-  return orientation
-}
+  return orientation;
+};
 
-export default useScreenOrientation
+export default useScreenOrientation;
