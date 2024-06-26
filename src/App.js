@@ -51,8 +51,8 @@ const App = () => {
 
   return (
     <>
-      <Routes />
-      {/* {isMobile ? (
+      {/* <Routes /> */}
+      {isMobile ? (
         screenType == "l" ? (
           token_verifying ? (
             <>
@@ -82,7 +82,7 @@ const App = () => {
         )
       ) : (
         <DesktopView />
-      )} */}
+      )}
     </>
   );
 };

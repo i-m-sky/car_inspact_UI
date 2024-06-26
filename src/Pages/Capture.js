@@ -39,22 +39,26 @@ const Capture = (props) => {
 
   const steps = [
     {
-      title: "FrontView",
+      title: "Front View",
+      name: "FrontView",
       status: "finish",
       icon: <FaCar />,
     },
     {
       title: "Right Side View",
+      name: "RightSideView",
       status: "finish",
       icon: <FaCarSide />,
     },
     {
       title: "Back View",
+      name: "BackView",
       status: "finish",
       icon: <IoCarOutline />,
     },
     {
       title: "Left Side View",
+      name: "LeftSideView",
       status: "finish",
       icon: <FaCarSide />,
     },
@@ -70,37 +74,43 @@ const Capture = (props) => {
     getViewTypeMsg();
   }, []);
 
-  const formData = new FormData();
+  function base64ToFile(base64String, filename) {
+    // Decode base64 string
+    let byteString = atob(base64String.split(",")[1]);
 
-  function handleTakePhoto(dataUri) {
-    const byteString = atob(dataUri.split(",")[1]);
-    const mimeString = dataUri.split(",")[0].split(":")[1].split(";")[0];
+    // Create an ArrayBuffer and a view (as unsigned 8-bit)
+    let ab = new ArrayBuffer(byteString.length);
+    let ia = new Uint8Array(ab);
 
-    const ab = new ArrayBuffer(byteString.length);
-    const ia = new Uint8Array(ab);
     for (let i = 0; i < byteString.length; i++) {
       ia[i] = byteString.charCodeAt(i);
     }
 
-    const image = new Blob([ab], { type: mimeString });
+    // Create a Blob from the ArrayBuffer
+    let blob = new Blob([ab], { type: "image/jpeg" });
 
-    console.log(getCurrentStepData(), "getCurrentStepData");
+    // Create a File object from the Blob
+    let file = new File([blob], filename, { type: "image/jpeg" });
 
+    return file;
+  }
+
+  const formData = new FormData();
+
+  function handleTakePhoto(dataUri) {
     const current_step = getCurrentStepData();
 
-    formData.append(current_step.title, image);
+    const file = base64ToFile(dataUri, current_step.name + ".jpg");
 
-    PostApi(
-      "upload-360view?inspection=" + "SU5TUEVDXzU4Nl80NjU1Nw==",
-      formData,
-      {
-        headers: {
-          "Content-Type": "multipart/form-data",
-        },
-      }
-    )
+    formData.append(current_step.title, file);
+
+    PostApi("upload-360view?inspection=" + inspectionToken, formData, {
+      headers: {
+        "Content-Type": "multipart/form-data",
+      },
+    })
       .then((res) => {
-        if (current_step.title == "Left Side View") {
+        if (current_step.name == "LeftSideView") {
           navigate("/?inspection=" + inspectionToken, {
             state: { currentIndex: main_index },
           });
@@ -110,7 +120,7 @@ const Capture = (props) => {
         console.log("opps something went wrong");
       });
 
-    console.log("Photo taken in Blob:", image);
+    console.log("Photo taken in Blob:", file);
     next();
   }
 
