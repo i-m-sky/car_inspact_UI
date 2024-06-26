@@ -58,12 +58,16 @@
   color: rgb(0, 255, 21) !important;
 }
 
-:where(.css-dev-only-do-not-override-1okl62o).ant-steps
+.ant-steps-item-finish .ant-steps-item-icon .ant-steps-icon {
+  color: rgb(0, 255, 21) !important;
+}
+
+/* :where(.css-dev-only-do-not-override-1okl62o).ant-steps
   .ant-steps-item-finish.ant-steps-item-custom
   .ant-steps-item-icon
   > .ant-steps-icon {
   color: rgb(0, 255, 21) !important;
-}
+} */
 
 .ant-steps-item-finish .ant-steps-item-icon {
   color: rgb(0, 255, 21) !important;
