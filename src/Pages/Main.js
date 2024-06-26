@@ -193,8 +193,16 @@ const Camera = () => {
     // }
     if (view === "View 360") {
       navigate(
-        "/view360?inspection=" + inspectionToken + "&current_index=" + index
+        "/capture?inspection=" +
+          inspectionToken +
+          "&current_index=" +
+          index +
+          "&view=" +
+          view
       );
+      // navigate(
+      //   "/view360?inspection=" + inspectionToken + "&current_index=" + index
+      // );
       setCurrentView(view);
       return;
     }
@@ -332,7 +340,7 @@ const Camera = () => {
             <ScannerLoader />
           ) : (
             <form onSubmit={handleSubmit}>
-              <p className="mt-3 text-dark">
+              <p className="mt-2 text-dark">
                 <strong>
                   Please upload images by clicking on the sections below to
                   start the inspection.
@@ -360,7 +368,7 @@ const Camera = () => {
                         src={image.url}
                         alt={image.text}
                         style={{
-                          width: "60%",
+                          width: "50%",
                           aspectRatio: "1 / 1",
                           objectFit: "cover",
                           cursor: "pointer",
@@ -390,7 +398,7 @@ const Camera = () => {
                   <Spin />
                 ) : (
                   <>
-                    <button type="submit" className="sbmt-btn mt-3">
+                    <button type="submit" className="sbmt-btn mt-1">
                       Upload and Submit
                     </button>
                   </>

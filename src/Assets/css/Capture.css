@@ -2,8 +2,8 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  max-width: 100%; /* Ensure camera doesn't exceed screen width */
-  overflow: hidden; /* Hide any overflow beyond the screen */
+  max-width: 100%;
+  overflow: hidden;
 }
 
 .camera {
@@ -13,14 +13,58 @@
 
 .overlay-text {
   position: absolute;
-  top: 20%;
+  top: 70%;
   left: 50%;
   transform: translate(-50%, -50%);
-  background-color: rgba(255, 255, 255, 0.8);
   padding: 10px;
   border-radius: 5px;
   text-align: center;
+  background-color: rgba(224, 53, 53, 0.524);
+  color: rgb(255, 255, 255);
 }
+
+.current-view-text {
+  position: absolute;
+  width: 100%;
+  top: 5%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  text-align: center;
+  font-weight: 600;
+  /* text-shadow: 0.25px 0.25px 0 white, -0.25px -0.25px 0 white,
+    -0.25px 0.25px 0 white, 0.25px -0.25px 0 white; */
+  padding: 5px 65px;
+}
+
 .overlay-text p {
   margin-bottom: 0px !important;
+}
+
+#container-circles {
+  position: absolute !important;
+  left: 94% !important;
+  bottom: 200px !important;
+}
+
+#inner-circle {
+  background: #a51010 !important;
+}
+
+.ant-steps-item-finish .ant-steps-item-title,
+.ant-steps-item-process .ant-steps-item-title {
+  color: darkgreen !important;
+}
+
+:where(.css-dev-only-do-not-override-1okl62o).ant-steps
+  .ant-steps-item-process.ant-steps-item-custom
+  .ant-steps-item-icon
+  > .ant-steps-icon {
+  color: darkgreen !important;
+}
+
+:where(.css-dev-only-do-not-override-1okl62o).ant-steps
+  .ant-steps-item-finish.ant-steps-item-custom
+  .ant-steps-item-icon
+  > .ant-steps-icon {
+  color: darkgreen !important;
 }

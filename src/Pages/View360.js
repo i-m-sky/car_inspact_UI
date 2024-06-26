@@ -363,7 +363,7 @@ const View360 = () => {
                       src={image.url}
                       alt={image.text}
                       style={{
-                        width: "70%",
+                        width: "50%",
                         aspectRatio: "1 / 1",
                         objectFit: "cover",
                         cursor: "pointer",
