@@ -41,7 +41,7 @@ const App = () => {
   };
 
   useEffect(() => {
-    // verifyToken();
+    verifyToken();
   }, []);
 
   useEffect(() => {
