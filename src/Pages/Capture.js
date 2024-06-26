@@ -17,7 +17,7 @@ import { PostApi } from "../Services/Service";
 import { useNavigate } from "react-router-dom";
 
 const Capture = (props) => {
-  const [viewType, setViewType] = useState("");
+  const [viewType, setViewType] = useState("Please capture front view of car.");
   const [main_index, setMainIndex] = useState(null);
   const [inspectionToken, setInspectionToken] = useState("");
   const [current, setCurrent] = useState(0);
@@ -39,40 +39,34 @@ const Capture = (props) => {
 
   const steps = [
     {
+      id: 0,
       title: "Front View",
       name: "FrontView",
       status: "finish",
       icon: <FaCar />,
     },
     {
+      id: 1,
       title: "Right Side View",
       name: "RightSideView",
       status: "finish",
       icon: <FaCarSide />,
     },
     {
+      id: 2,
       title: "Back View",
       name: "BackView",
       status: "finish",
       icon: <IoCarOutline />,
     },
     {
+      id: 3,
       title: "Left Side View",
       name: "LeftSideView",
       status: "finish",
       icon: <FaCarSide />,
     },
   ];
-
-  const getViewTypeMsg = async () => {
-    const params = new URLSearchParams(window.location.search);
-    const type = params.get("view");
-    setViewType("Take a photo of the car's " + type);
-  };
-
-  useEffect(() => {
-    getViewTypeMsg();
-  }, []);
 
   function base64ToFile(base64String, filename) {
     let byteString = atob(base64String.split(",")[1]);
@@ -95,6 +89,13 @@ const Capture = (props) => {
 
   function handleTakePhoto(dataUri) {
     const current_step = getCurrentStepData();
+    const current = steps[current_step["id"] + 1];
+
+    if (current_step && current) {
+      setViewType(
+        "Please capture " + current?.title?.toLocaleLowerCase() + " of car."
+      );
+    }
 
     const file = base64ToFile(dataUri, current_step.name + ".jpg");
 
@@ -107,17 +108,16 @@ const Capture = (props) => {
     })
       .then((res) => {})
       .catch((err) => {
+        alert("opps something went wrong,please re upload images");
         console.log("opps something went wrong");
       });
 
-    console.log("Photo taken in Blob:", file);
-    next();
-    console.log(main_index, "main_index");
     if (current_step.name == "LeftSideView") {
       navigate("/?inspection=" + inspectionToken, {
         state: { currentIndex: main_index },
       });
     }
+    next();
   }
 
   function handleCameraError(error) {
@@ -134,6 +134,12 @@ const Capture = (props) => {
 
   const goToStep = (step) => {
     setCurrent(step);
+    const current = steps[step];
+    if (current) {
+      setViewType(
+        "Please capture " + current?.title?.toLocaleLowerCase() + " of car."
+      );
+    }
   };
 
   const getCurrentStepData = () => {
@@ -175,14 +181,18 @@ const Capture = (props) => {
         />
         <div className="current-view-text">
           <Steps current={current}>
-            {steps.map((item) => (
-              <Step key={item.title} title={item.title} icon={item.icon} />
+            {steps.map((item, i) => (
+              <Step
+                className="antd-steps text-center"
+                key={item.title}
+                title={item.title}
+                icon={item.icon}
+                onClick={() => goToStep(i)}
+              />
             ))}
           </Steps>
         </div>
-        <div className="overlay-text">
-          <p>Please point your camera at car.</p>
-        </div>
+        <div className="overlay-text">{viewType && <p>{viewType}</p>}</div>
       </div>
     </>
   );

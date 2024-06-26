@@ -13,14 +13,18 @@
 
 .overlay-text {
   position: absolute;
-  top: 70%;
+  top: 75%;
   left: 50%;
   transform: translate(-50%, -50%);
   padding: 10px;
   border-radius: 5px;
   text-align: center;
-  background-color: rgba(224, 53, 53, 0.524);
+  background-color: rgba(53, 224, 73, 0.598);
   color: rgb(255, 255, 255);
+}
+
+.overlay-text p {
+  color: white;
 }
 
 .current-view-text {
@@ -47,24 +51,39 @@
 }
 
 #inner-circle {
-  background: #a51010 !important;
+  background: rgba(254, 0, 0, 0.566) !important;
 }
 
-.ant-steps-item-finish .ant-steps-item-title,
-.ant-steps-item-process .ant-steps-item-title {
-  color: darkgreen !important;
-}
-
-:where(.css-dev-only-do-not-override-1okl62o).ant-steps
-  .ant-steps-item-process.ant-steps-item-custom
-  .ant-steps-item-icon
-  > .ant-steps-icon {
-  color: darkgreen !important;
+.ant-steps-item-finish .ant-steps-item-title {
+  color: rgb(0, 255, 21) !important;
 }
 
 :where(.css-dev-only-do-not-override-1okl62o).ant-steps
   .ant-steps-item-finish.ant-steps-item-custom
   .ant-steps-item-icon
   > .ant-steps-icon {
-  color: darkgreen !important;
+  color: rgb(0, 255, 21) !important;
+}
+
+.ant-steps-item-finish .ant-steps-item-icon {
+  color: rgb(0, 255, 21) !important;
+}
+.antd-steps {
+  background-color: rgba(150, 148, 148, 0.414) !important;
+  padding: 10px 20px 2.5px 20px;
+}
+
+.active-step {
+  border: 1px solid rgb(0, 255, 21);
+}
+
+.ant-steps-item-process {
+  background-color: rgba(254, 0, 0, 0.566) !important;
+}
+
+.ant-steps-item-title {
+  color: white !important;
+}
+.ant-steps-icon {
+  color: white !important;
 }
