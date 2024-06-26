@@ -1,30 +1,24 @@
-import {useState, useEffect} from 'react'
+import { useState, useEffect } from "react";
 
-const getOrientation = () =>
-  window.screen.orientation.type
+const isLandscape = () => {
+  if (window.screen && window.screen.orientation) {
+    return window.screen.orientation.type.startsWith("landscape");
+  } else if (typeof window.orientation === "number") {
+    return Math.abs(window.orientation) === 90;
+  }
+  return window.innerWidth > window.innerHeight;
+};
 
 const useScreenOrientation = () => {
-  const [orientation, setOrientation] =
-    useState(getOrientation())
-
-  const updateOrientation = event => {
-    setOrientation(getOrientation())
-  }
+  
+  const [landscape, setLandscape] = useState(isLandscape());
 
   useEffect(() => {
-    window.addEventListener(
-      'orientationchange',
-      updateOrientation
-    )
-    return () => {
-      window.removeEventListener(
-        'orientationchange',
-        updateOrientation
-      )
-    }
-  }, [])
+    setLandscape(isLandscape());
+  }, []);
 
-  return orientation
-}
+  return landscape ? "l" : "p";
 
-export default useScreenOrientation
+};
+
+export default useScreenOrientation;

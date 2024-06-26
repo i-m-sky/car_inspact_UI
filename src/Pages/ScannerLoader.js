@@ -1,8 +1,8 @@
-import "../Assets/css/ScannerLoader.css"
+import "../Assets/css/ScannerLoader.css";
 const ScannerLoader = () => {
   return (
     <>
-      <div class="ocrloader">
+      <div className="ocrloader">
         <em></em>
         <div>
           <i></i>
@@ -28,6 +28,5 @@ const ScannerLoader = () => {
     </>
   );
 };
-
 
 export default ScannerLoader;

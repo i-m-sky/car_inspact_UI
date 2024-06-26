@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from "react";
-import "react-multi-carousel/lib/styles.css";
 import "../node_modules/bootstrap/dist/css/bootstrap.min.css";
 import DesktopView from "./components/Desktop/Desktop";
 import useScreenOrientation from "./hooks/useScreenOrientation";
@@ -14,6 +13,8 @@ const App = () => {
   const [isMobile, setIsMobile] = useState(false);
   const [inspectionToken, setInspectionToken] = useState(false);
   const [token_verifying, setTokenVerifying] = useState(true);
+  const [token_message, setTokenMessage] = useState("Invalid token");
+  const [screenWidth, setScreenWidth] = useState(window.innerWidth);
 
   const verifyToken = async () => {
     const params = new URLSearchParams(window.location.search);
@@ -29,9 +30,11 @@ const App = () => {
         setInspectionToken(true);
         setTokenVerifying(false);
       } else {
+        setTokenMessage(res.data.message);
         setTokenVerifying(false);
       }
     } catch (e) {
+      setTokenMessage("Token verification falid");
       setInspectionToken(false);
       setTokenVerifying(false);
     }
@@ -39,29 +42,17 @@ const App = () => {
 
   useEffect(() => {
     verifyToken();
-
-    const handleResize = () => {
-      setIsMobile(window.innerWidth < 1000);
-    };
-
-    const handleOrientationChange = () => {
-      setIsMobile(window.innerWidth < 1000);
-    };
-
-    handleResize();
-    window.addEventListener("resize", handleResize);
-    window.addEventListener("orientationchange", handleOrientationChange);
-
-    return () => {
-      window.removeEventListener("resize", handleResize);
-      window.removeEventListener("orientationchange", handleOrientationChange);
-    };
   }, []);
+
+  useEffect(() => {
+    console.log(screenWidth, "screenWidth");
+    setIsMobile(screenWidth < 1000);
+  }, [screenWidth]);
 
   return (
     <>
       {isMobile ? (
-        screenType === "l" ? (
+        screenType == "l" ? (
           token_verifying ? (
             <>
               <Spin
@@ -82,7 +73,7 @@ const App = () => {
             <Routes />
           ) : (
             <div>
-              <p>Invalid Token</p>
+              <p>{token_message}</p>
             </div>
           )
         ) : (

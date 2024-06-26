@@ -49,7 +49,7 @@ const NotSupportScreenMode = () => {
           <i className="rotate-icon" style={styles.rotateIcon}>
             ↻
           </i>
-          <p style={styles.p}>We do not support landscape mode.</p>
+          <p style={styles.p}>We do not support portrait mode.</p>
         </div>
       </div>
     </>
