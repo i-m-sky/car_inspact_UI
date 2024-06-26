@@ -102,7 +102,7 @@ const Capture = (props) => {
 
     const file = base64ToFile(dataUri, current_step.name + ".jpg");
 
-    formData.append(current_step.title, file);
+    formData.append(current_step.name, file);
 
     PostApi("upload-360view?inspection=" + inspectionToken, formData, {
       headers: {
