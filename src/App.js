@@ -45,7 +45,6 @@ const App = () => {
   }, []);
 
   useEffect(() => {
-    console.log(screenWidth, "screenWidth");
     setIsMobile(screenWidth < 1000);
   }, [screenWidth]);
 

@@ -301,9 +301,9 @@ const Camera = () => {
   };
 
   useEffect(() => {
+    console.log(location.state, "stateeee");
     if (
-      location?.state?.currentIndex &&
-      Object.keys(location?.state?.view360 ?? {}).length > 0
+      location?.state?.currentIndex
     ) {
       openMessage();
       setUploadedImageIndex((uploadedImageIndexs) => [

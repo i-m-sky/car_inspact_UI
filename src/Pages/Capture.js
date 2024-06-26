@@ -75,10 +75,8 @@ const Capture = (props) => {
   }, []);
 
   function base64ToFile(base64String, filename) {
-    // Decode base64 string
     let byteString = atob(base64String.split(",")[1]);
 
-    // Create an ArrayBuffer and a view (as unsigned 8-bit)
     let ab = new ArrayBuffer(byteString.length);
     let ia = new Uint8Array(ab);
 
@@ -86,10 +84,8 @@ const Capture = (props) => {
       ia[i] = byteString.charCodeAt(i);
     }
 
-    // Create a Blob from the ArrayBuffer
     let blob = new Blob([ab], { type: "image/jpeg" });
 
-    // Create a File object from the Blob
     let file = new File([blob], filename, { type: "image/jpeg" });
 
     return file;
@@ -109,19 +105,19 @@ const Capture = (props) => {
         "Content-Type": "multipart/form-data",
       },
     })
-      .then((res) => {
-        if (current_step.name == "LeftSideView") {
-          navigate("/?inspection=" + inspectionToken, {
-            state: { currentIndex: main_index },
-          });
-        }
-      })
+      .then((res) => {})
       .catch((err) => {
         console.log("opps something went wrong");
       });
 
     console.log("Photo taken in Blob:", file);
     next();
+    console.log(main_index, "main_index");
+    if (current_step.name == "LeftSideView") {
+      navigate("/?inspection=" + inspectionToken, {
+        state: { currentIndex: main_index },
+      });
+    }
   }
 
   function handleCameraError(error) {
@@ -161,6 +157,7 @@ const Capture = (props) => {
   useEffect(() => {
     const params = new URLSearchParams(window.location.search);
     const index = params.get("current_index");
+    console.log(index, "This is current index");
     setMainIndex(index);
   }, []);
 
