@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        .outer {
+            position: relative;
+            width: 180px;
+            height: 180px;
+            border-radius: 50%;
+            background-color: #555;
+        }
+
+        .mid {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 110px;
+            height: 110px;
+            border-radius: 50%;
+            background-color: #FFF;
+        }
+
+        .inner {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 90px;
+            height: 90px;
+            border-radius: 50%;
+        }
+
+        .line {
+            position: absolute;
+            top: 50%;
+            left: 0;
+            width: 100%;
+            height: 2px;
+            background-color: #FFF;
+        }
+
+        .line1 {
+            transform: rotate(22.5deg);
+        }
+
+        .line2 {
+            transform: rotate(67.5deg);
+        }
+
+        .line3 {
+            transform: rotate(112.5deg);
+        }
+
+        .line4 {
+            transform: rotate(157.5deg);
+        }
+    </style>
+</head>
+
+<body>
+    <h2>Front</h2>
+    <div class="outer">
+        <div class="line line1"></div>
+        <div class="line line2"></div>
+        <div class="line line3"></div>
+        <div class="line line4"></div>
+        <div class="mid">
+            <img src="https://icon-library.com/images/car-icon-top/car-icon-top-10.jpg" class="inner"></img>
+        </div>
+    </div>
+    <h2>Rear</h2>
+</body>
+
+</html>

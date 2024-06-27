@@ -15,12 +15,14 @@ import { IoCarOutline } from "react-icons/io5";
 import { Step } from "@material-ui/core";
 import { PostApi } from "../Services/Service";
 import { useNavigate } from "react-router-dom";
+import CarDirectionGuide from "../components/CarDirectionGuide";
 
 const Capture = (props) => {
   const [viewType, setViewType] = useState("Please capture front view of car.");
   const [main_index, setMainIndex] = useState(null);
   const [inspectionToken, setInspectionToken] = useState("");
   const [current, setCurrent] = useState(0);
+  const [current_active_side, setCurrentActiveSide] = useState("");
   const navigate = useNavigate();
   const [Images, setImages] = useState({
     FrontView: "",
@@ -47,22 +49,50 @@ const Capture = (props) => {
     },
     {
       id: 1,
-      title: "Right Side View",
-      name: "RightSideView",
+      title: "Right Front Window",
+      name: "RightFrontWindow",
       status: "finish",
       icon: <FaCarSide />,
     },
     {
       id: 2,
-      title: "Back View",
-      name: "BackView",
+      title: "Right View",
+      name: "RightView",
+      status: "finish",
+      icon: <FaCarSide />,
+    },
+    {
+      id: 3,
+      title: "Right Rear Window",
+      name: "RightRearWindow",
       status: "finish",
       icon: <IoCarOutline />,
     },
     {
-      id: 3,
-      title: "Left Side View",
-      name: "LeftSideView",
+      id: 4,
+      title: "Rear View",
+      name: "RearView",
+      status: "finish",
+      icon: <FaCarSide />,
+    },
+    {
+      id: 5,
+      title: "Left Rear Window",
+      name: "LeftRearWindow",
+      status: "finish",
+      icon: <FaCarSide />,
+    },
+    {
+      id: 6,
+      title: "Left View",
+      name: "LeftView",
+      status: "finish",
+      icon: <FaCarSide />,
+    },
+    {
+      id: 7,
+      title: "Left Front Window",
+      name: "LeftFrontWindow",
       status: "finish",
       icon: <FaCarSide />,
     },
@@ -91,6 +121,8 @@ const Capture = (props) => {
     const current_step = getCurrentStepData();
     const current = steps[current_step["id"] + 1];
 
+    setCurrentActiveSide(current.name);
+
     if (current_step && current) {
       setViewType(
         "Please capture " + current?.title?.toLocaleLowerCase() + " of car."
@@ -112,7 +144,7 @@ const Capture = (props) => {
         console.log("opps something went wrong");
       });
 
-    if (current_step.name == "LeftSideView") {
+    if (current_step.name == "LeftFrontWindow") {
       navigate("/?inspection=" + inspectionToken, {
         state: { currentIndex: main_index },
       });
@@ -179,7 +211,7 @@ const Capture = (props) => {
           imageCompression={0.8}
           idealResolution={{ width: 1520, height: 600 }}
         />
-        <div className="current-view-text">
+        {/* <div className="current-view-text">
           <Steps current={current}>
             {steps.map((item, i) => (
               <Step
@@ -191,8 +223,16 @@ const Capture = (props) => {
               />
             ))}
           </Steps>
-        </div>
+        </div> */}
+
+        {
+          
+        }
         <div className="overlay-text">{viewType && <p>{viewType}</p>}</div>
+
+        <div className="guide">
+          <CarDirectionGuide current_active_side={current_active_side} />
+        </div>
       </div>
     </>
   );

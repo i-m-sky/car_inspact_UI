@@ -1,0 +1,96 @@
+.outer {
+  position: relative;
+  width: 100px;
+  height: 100px;
+  border-radius: 50%;
+  background-color: #555555e6;
+}
+
+.mid {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  background-color: #fff;
+}
+
+.inner {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 90px;
+  height: 90px;
+  border-radius: 50%;
+  padding: 10px;
+}
+
+.line {
+  position: absolute;
+  top: 50%;
+  left: 0;
+  width: 100%;
+  height: 2px;
+  background-color: #fff;
+}
+
+.line1 {
+  transform: rotate(22.5deg);
+}
+
+.line2 {
+  transform: rotate(67.5deg);
+}
+
+.line3 {
+  transform: rotate(112.5deg);
+}
+
+.line4 {
+  transform: rotate(157.5deg);
+}
+
+/* For front view without class*/
+
+.front-dot {
+  margin-bottom: 1px;
+}
+
+.rear-dot {
+  margin-top: 83px;
+}
+
+.right-dot {
+  margin: 45px 0px 0px 76px;
+}
+
+.left-dot {
+  margin: 45px 76px 0px 0px;
+}
+
+.left-front-dot {
+  margin: 16px 55px 0px 0px;
+}
+
+.left-rear-dot {
+  margin: 70px 55px 0px 0px;
+}
+
+.right-rear-dot {
+  margin: 70px 0px 0px 55px;
+}
+
+.right-front-dot {
+  margin: 16px 0px 0px 55px;
+}
+
+.dot {
+  height: 14px;
+  width: 14px;
+  background-color: red;
+  border-radius: 50%;
+  display: inline-block;
+}

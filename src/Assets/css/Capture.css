@@ -19,7 +19,7 @@
   padding: 10px;
   border-radius: 5px;
   text-align: center;
-  background-color: rgba(53, 224, 73, 0.598);
+  background-color: rgba(53, 224, 73, 0.438);
   color: rgb(255, 255, 255);
 }
 
@@ -29,14 +29,14 @@
 
 .current-view-text {
   position: absolute;
-  width: 100%;
+  width: 95%;
   top: 5%;
-  left: 50%;
+  left: 46.2%;
   transform: translate(-50%, -50%);
   text-align: center;
   font-weight: 600;
-  /* text-shadow: 0.25px 0.25px 0 white, -0.25px -0.25px 0 white,
-    -0.25px 0.25px 0 white, 0.25px -0.25px 0 white; */
+  overflow-x: auto !important;
+  overflow-y: auto !important;
   padding: 5px 65px;
 }
 
@@ -47,11 +47,17 @@
 #container-circles {
   position: absolute !important;
   left: 94% !important;
-  bottom: 200px !important;
+  bottom: 220px !important;
+}
+
+#inner-circle,
+#outer-circle {
+  background: rgba(254, 0, 0, 0.606) !important;
 }
 
 #inner-circle {
-  background: rgba(254, 0, 0, 0.566) !important;
+  background: white !important;
+  border-radius: 3px !important;
 }
 
 .ant-steps-item-finish .ant-steps-item-title {
@@ -61,13 +67,6 @@
 .ant-steps-item-finish .ant-steps-item-icon .ant-steps-icon {
   color: rgb(0, 255, 21) !important;
 }
-
-/* :where(.css-dev-only-do-not-override-1okl62o).ant-steps
-  .ant-steps-item-finish.ant-steps-item-custom
-  .ant-steps-item-icon
-  > .ant-steps-icon {
-  color: rgb(0, 255, 21) !important;
-} */
 
 .ant-steps-item-finish .ant-steps-item-icon {
   color: rgb(0, 255, 21) !important;
@@ -90,4 +89,45 @@
 }
 .ant-steps-icon {
   color: white !important;
+}
+
+/* here */
+/* 
+.current-view-text {
+  align-items: center;
+  justify-content: center;
+  width: 75% !important;
+  overflow-x: auto; 
+  padding: 5px 65px;
+}
+
+.current-view-text .ant-steps {
+  min-width: 50px; 
+  display: flex;
+}
+
+.current-view-text .ant-steps-item {
+  flex: 1 0 150px; 
+}
+
+.current-view-text .ant-steps-horizontal .ant-steps-item {
+  white-space: nowrap; 
+}
+
+.current-view-text::-webkit-scrollbar {
+  height: 8px; 
+} */
+.current-view-text .ant-steps-item {
+  flex: 1 0 150px;
+}
+
+.guide {
+  position: absolute;
+  top: 65%;
+  left: 88%;
+  transform: translate(-50%, -50%);
+  padding: 10px;
+  border-radius: 5px;
+  text-align: center;
+  color: rgb(255, 255, 255);
 }
