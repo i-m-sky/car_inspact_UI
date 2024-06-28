@@ -72,7 +72,7 @@ const App = () => {
     <>
       {/* <Routes /> */}
       {isMobile ? (
-        orientation == "landscape" ? (
+        orientation == "portrait" ? (
           token_verifying ? (
             <>
               <Spin
