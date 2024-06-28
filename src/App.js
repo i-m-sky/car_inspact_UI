@@ -57,8 +57,8 @@ const App = () => {
     function handleOrientationChange() {
       setOrientation(
         window.matchMedia("(orientation: landscape)").matches
-          ? "landscape"
-          : "portrait"
+          ? "portrait"
+          : "landscape"
       );
     }
     window.addEventListener("orientationchange", handleOrientationChange);
@@ -66,13 +66,16 @@ const App = () => {
     return () => {
       window.removeEventListener("orientationchange", handleOrientationChange);
     };
-  }, [orientation]);
+  }, []);
 
+  useEffect(() => {
+    console.log(orientation, "or");
+  }, [orientation]);
   return (
     <>
       {/* <Routes /> */}
       {isMobile ? (
-        orientation === "portrait" ? (
+        orientation === "landscape" ? (
           token_verifying ? (
             <>
               <Spin
