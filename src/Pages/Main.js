@@ -236,7 +236,7 @@ const Camera = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    if (location?.state?.is_uploaded) {
+    if (!location?.state?.is_uploaded) {
       setNotImageUpload(true);
       setTimeout(() => {
         setNotImageUpload(false);
