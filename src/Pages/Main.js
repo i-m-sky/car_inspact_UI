@@ -21,6 +21,7 @@ import { Image, Spin, Button, message } from "antd";
 import { useNavigate } from "react-router-dom";
 import ScannerLoader from "./ScannerLoader";
 import { useLocation } from "react-router-dom";
+import Welcome from "./Welcome";
 
 const Camera = () => {
   const Scanned_Types = [
@@ -302,9 +303,7 @@ const Camera = () => {
 
   useEffect(() => {
     console.log(location.state, "stateeee");
-    if (
-      location?.state?.currentIndex
-    ) {
+    if (location?.state?.currentIndex) {
       openMessage();
       setUploadedImageIndex((uploadedImageIndexs) => [
         ...uploadedImageIndexs,
@@ -335,79 +334,84 @@ const Camera = () => {
     <>
       {contextHolder}
       <div className="container-fluid">
-        <div className="row">
-          {scannerLoader ? (
-            <ScannerLoader />
-          ) : (
-            <form onSubmit={handleSubmit}>
-              <p className="mt-2 text-dark">
-                <strong>
-                  Please upload images by clicking on the sections below to
-                  start the inspection.
-                </strong>
-              </p>
-              <div
-                className="MultiCarousel"
-                data-items="4,3,5,6"
-                data-slide="1"
-                id="MultiCarousel"
-                data-interval="1000"
-              >
-                <div className="MultiCarousel-inner">
-                  {Scanned_Types.map((image, index) => (
-                    <div
-                      key={index}
-                      className="item text-center w-25"
-                      style={{ lineHeight: "1px" }}
-                    >
-                      <p className="text-dark">
-                        <strong>{image.text}</strong>
-                      </p>
-                      <img
-                        id="uploaded-image"
-                        src={image.url}
-                        alt={image.text}
-                        style={{
-                          width: "50%",
-                          aspectRatio: "1 / 1",
-                          objectFit: "cover",
-                          cursor: "pointer",
-                          border: "1.5px solid #cec0c0",
-                          borderRadius: "10px",
-                        }}
-                        className={
-                          uploadedImageIndexs.includes(index) ? "uploaded" : ""
-                        }
-                        onClick={() => showDrawer(image.text, index)}
-                      />
-                    </div>
-                  ))}
+        {false ? (
+          <Welcome />
+        ) : (
+          <div className="row">
+            {scannerLoader ? (
+              <ScannerLoader />
+            ) : (
+              <form onSubmit={handleSubmit}>
+                <p className="mt-2 text-dark">
+                  <strong>
+                    Please upload images by clicking on the sections below to
+                    start the inspection.
+                  </strong>
+                </p>
+                <div
+                  className="MultiCarousel"
+                  data-items="4,3,5,6"
+                  data-slide="1"
+                  id="MultiCarousel"
+                  data-interval="1000"
+                >
+                  <div className="MultiCarousel-inner">
+                    {Scanned_Types.map((image, index) => (
+                      <div
+                        key={index}
+                        className="item text-center w-25"
+                        style={{ lineHeight: "1px" }}
+                      >
+                        <p className="text-dark">
+                          <strong>{image.text}</strong>
+                        </p>
+                        <img
+                          id="uploaded-image"
+                          src={image.url}
+                          alt={image.text}
+                          style={{
+                            width: "50%",
+                            aspectRatio: "1 / 1",
+                            objectFit: "cover",
+                            cursor: "pointer",
+                            border: "1.5px solid #cec0c0",
+                            borderRadius: "10px",
+                          }}
+                          className={
+                            uploadedImageIndexs.includes(index)
+                              ? "uploaded"
+                              : ""
+                          }
+                          onClick={() => showDrawer(image.text, index)}
+                        />
+                      </div>
+                    ))}
+                  </div>
+                  <span className="leftLst">
+                    <MdOutlineKeyboardDoubleArrowLeft size={50} />
+                  </span>
+                  <span className="rightLst">
+                    <MdOutlineKeyboardDoubleArrowRight size={50} />
+                  </span>
                 </div>
-                <span className="leftLst">
-                  <MdOutlineKeyboardDoubleArrowLeft size={50} />
-                </span>
-                <span className="rightLst">
-                  <MdOutlineKeyboardDoubleArrowRight size={50} />
-                </span>
-              </div>
-              {not_image_upload && (
-                <Alert type="error" message={customMsg} banner />
-              )}
-              <div className="text-center">
-                {loading ? (
-                  <Spin />
-                ) : (
-                  <>
-                    <button type="submit" className="sbmt-btn mt-1">
-                      Upload and Submit
-                    </button>
-                  </>
+                {not_image_upload && (
+                  <Alert type="error" message={customMsg} banner />
                 )}
-              </div>
-            </form>
-          )}
-        </div>
-
+                <div className="text-center">
+                  {loading ? (
+                    <Spin />
+                  ) : (
+                    <>
+                      <button type="submit" className="sbmt-btn mt-1">
+                        Upload and Submit
+                      </button>
+                    </>
+                  )}
+                </div>
+              </form>
+            )}
+          </div>
+        )}
         <Drawer
           placement="bottom"
           height={130}

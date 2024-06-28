@@ -23,6 +23,7 @@ const Capture = (props) => {
   const [inspectionToken, setInspectionToken] = useState("");
   const [current, setCurrent] = useState(0);
   const [current_active_side, setCurrentActiveSide] = useState("");
+  const [controls, setControls] = useState(false);
   const navigate = useNavigate();
   const [Images, setImages] = useState({
     FrontView: "",
@@ -155,6 +156,11 @@ const Capture = (props) => {
   }
 
   function handleCameraError(error) {
+    if (error) {
+      setControls(false);
+      document.getElementById("outer-circle").style = "display:none;";
+    }
+
     console.error("Camera error:", error);
   }
 
@@ -191,6 +197,9 @@ const Capture = (props) => {
   };
 
   useEffect(() => {
+    setTimeout(() => {
+      setControls(true);
+    }, 1500);
     getInspectionToken();
   }, []);
 
@@ -227,12 +236,16 @@ const Capture = (props) => {
           </Steps>
         </div> */}
 
-        {}
-        <div className="overlay-text">{viewType && <p>{viewType}</p>}</div>
-
-        <div className="guide">
-          <CarDirectionGuide current_active_side={current_active_side} />
-        </div>
+        {controls ? (
+          <>
+            <div className="overlay-text">{viewType && <p>{viewType}</p>}</div>
+            <div className="guide">
+              <CarDirectionGuide current_active_side={current_active_side} />
+            </div>
+          </>
+        ) : (
+          <></>
+        )}
       </div>
     </>
   );
