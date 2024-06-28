@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from "react";
 import "../node_modules/bootstrap/dist/css/bootstrap.min.css";
 import DesktopView from "./components/Desktop/Desktop";
-import useScreenOrientation from "./hooks/useScreenOrientation";
 import NotSupportScreenMode from "./Pages/NotSupportScreenMode";
 import Routes from "./routes";
 import Auth from "./Services/Auth";
@@ -9,12 +8,12 @@ import { LoadingOutlined } from "@ant-design/icons";
 import { Spin } from "antd";
 
 const App = () => {
-  const [screenType] = useScreenOrientation();
   const [isMobile, setIsMobile] = useState(false);
   const [inspectionToken, setInspectionToken] = useState(false);
   const [token_verifying, setTokenVerifying] = useState(true);
   const [token_message, setTokenMessage] = useState("Invalid token");
   const [screenWidth, setScreenWidth] = useState(window.innerWidth);
+  const [orientation, setOrientation] = useState(getInitialOrientation());
 
   const verifyToken = async () => {
     const params = new URLSearchParams(window.location.search);
@@ -48,11 +47,32 @@ const App = () => {
     setIsMobile(screenWidth < 1000);
   }, [screenWidth]);
 
+  function getInitialOrientation() {
+    return window.matchMedia("(orientation: landscape)").matches
+      ? "landscape"
+      : "portrait";
+  }
+
+  useEffect(() => {
+    function handleOrientationChange() {
+      setOrientation(
+        window.matchMedia("(orientation: landscape)").matches
+          ? "landscape"
+          : "portrait"
+      );
+    }
+    window.addEventListener("orientationchange", handleOrientationChange);
+
+    return () => {
+      window.removeEventListener("orientationchange", handleOrientationChange);
+    };
+  }, []);
+
   return (
     <>
       {/* <Routes /> */}
       {isMobile ? (
-        screenType == "l" ? (
+        orientation == "landscape" ? (
           token_verifying ? (
             <>
               <Spin
