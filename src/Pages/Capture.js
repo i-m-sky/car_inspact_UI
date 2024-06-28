@@ -18,6 +18,7 @@ import { useNavigate } from "react-router-dom";
 import CarDirectionGuide from "../components/CarDirectionGuide";
 
 const Capture = (props) => {
+  
   const [viewType, setViewType] = useState("Please capture front view of car.");
   const [main_index, setMainIndex] = useState(null);
   const [inspectionToken, setInspectionToken] = useState("");
