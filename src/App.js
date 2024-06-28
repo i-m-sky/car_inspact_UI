@@ -13,7 +13,7 @@ const App = () => {
   const [token_verifying, setTokenVerifying] = useState(true);
   const [token_message, setTokenMessage] = useState("Invalid token");
   const [screenWidth, setScreenWidth] = useState(window.innerWidth);
-  const [orientation, setOrientation] = useState(getInitialOrientation());
+  const [orientation, setOrientation] = useState(window.orientation || 0);
 
   const verifyToken = async () => {
     const params = new URLSearchParams(window.location.search);
@@ -53,14 +53,27 @@ const App = () => {
       : "portrait";
   }
 
+  // useEffect(() => {
+  //   function handleOrientationChange() {
+  //     setOrientation(
+  //       window.matchMedia("(orientation: landscape)").matches
+  //         ? "portrait"
+  //         : "landscape"
+  //     );
+  //   }
+  //   window.addEventListener("orientationchange", handleOrientationChange);
+
+  //   return () => {
+  //     window.removeEventListener("orientationchange", handleOrientationChange);
+  //   };
+  // }, []);
+
+  const handleOrientationChange = () => {
+    const newOrientation = window.orientation || 0;
+    setOrientation(newOrientation);
+  };
+
   useEffect(() => {
-    function handleOrientationChange() {
-      setOrientation(
-        window.matchMedia("(orientation: landscape)").matches
-          ? "portrait"
-          : "landscape"
-      );
-    }
     window.addEventListener("orientationchange", handleOrientationChange);
 
     return () => {
@@ -75,7 +88,7 @@ const App = () => {
     <>
       {/* <Routes /> */}
       {isMobile ? (
-        orientation === "landscape" ? (
+        Math.abs(orientation) === 90 ? (
           token_verifying ? (
             <>
               <Spin
