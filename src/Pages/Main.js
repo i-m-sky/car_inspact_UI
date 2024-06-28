@@ -187,12 +187,6 @@ const Camera = () => {
 
   const showDrawer = (view, index) => {
     setCurrentIndex(index);
-    // if (
-    //   view === "View 360" &&
-    //   Object.keys(location?.state?.view360 ?? {}).length > 0
-    // ) {
-    //   return;
-    // }
     if (view === "View 360") {
       navigate(
         "/capture?inspection=" +
@@ -202,9 +196,7 @@ const Camera = () => {
           "&view=" +
           view
       );
-      // navigate(
-      //   "/view360?inspection=" + inspectionToken + "&current_index=" + index
-      // );
+
       setCurrentView(view);
       return;
     }
@@ -244,10 +236,7 @@ const Camera = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    if (
-      Object.keys(images).length < 1 &&
-      Object.keys(location?.state?.view360 ?? {}).length < 1
-    ) {
+    if (location?.state?.is_uploaded) {
       setNotImageUpload(true);
       setTimeout(() => {
         setNotImageUpload(false);
@@ -255,17 +244,17 @@ const Camera = () => {
       return;
     }
 
-    if (
-      !Object.keys(images).includes("VIN") &&
-      !Object.keys(images).includes("Odometer")
-    ) {
-      setCustomMsg("Please Upload One Image Either VIN or Odometer");
-      setNotImageUpload(true);
-      setTimeout(() => {
-        setNotImageUpload(false);
-      }, 5000);
-      return;
-    }
+    // if (
+    //   !Object.keys(images).includes("VIN") &&
+    //   !Object.keys(images).includes("Odometer")
+    // ) {
+    //   setCustomMsg("Please Upload One Image Either VIN or Odometer");
+    //   setNotImageUpload(true);
+    //   setTimeout(() => {
+    //     setNotImageUpload(false);
+    //   }, 5000);
+    //   return;
+    // }
 
     setScannerLoader(true);
 

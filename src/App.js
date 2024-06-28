@@ -47,7 +47,6 @@ const App = () => {
     setIsMobile(screenWidth < 1000);
   }, [screenWidth]);
 
-
   const handleOrientationChange = () => {
     const newOrientation = window.orientation || 0;
     setOrientation(newOrientation);
