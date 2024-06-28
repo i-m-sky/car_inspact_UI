@@ -62,6 +62,7 @@ const Camera = () => {
   const [inspectionToken, setInspectionToken] = useState("");
   const [not_image_upload, setNotImageUpload] = useState(false);
   const [customMsg, setCustomMsg] = useState("Please Upload Images");
+  const [procced, setProcced] = useState(true);
   const formRef = useRef(null); // Create a ref for the form
 
   const getInspectionToken = async () => {
@@ -334,8 +335,19 @@ const Camera = () => {
     <>
       {contextHolder}
       <div className="container-fluid">
-        {false ? (
-          <Welcome />
+        {procced ? (
+          <>
+            <Welcome />
+            <div className="w-100 mb-3">
+              <Button
+                type="primary"
+                className="w-100 procced-btn"
+                onClick={() => setProcced(false)}
+              >
+                Procced
+              </Button>
+            </div>
+          </>
         ) : (
           <div className="row">
             {scannerLoader ? (
