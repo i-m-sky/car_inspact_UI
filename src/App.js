@@ -53,8 +53,6 @@ const App = () => {
       : "portrait";
   }
 
-
-
   useEffect(() => {
     function handleOrientationChange() {
       setOrientation(
@@ -68,7 +66,7 @@ const App = () => {
     return () => {
       window.removeEventListener("orientationchange", handleOrientationChange);
     };
-  }, []);
+  }, [orientation]);
 
   return (
     <>
