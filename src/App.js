@@ -54,6 +54,10 @@ const App = () => {
   }
 
   useEffect(() => {
+    getInitialOrientation();
+  }, [orientation]);
+
+  useEffect(() => {
     function handleOrientationChange() {
       setOrientation(
         window.matchMedia("(orientation: landscape)").matches
@@ -72,7 +76,7 @@ const App = () => {
     <>
       {/* <Routes /> */}
       {isMobile ? (
-        orientation == "portrait" ? (
+        orientation == "landscape" ? (
           token_verifying ? (
             <>
               <Spin
