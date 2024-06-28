@@ -311,6 +311,9 @@ const Camera = () => {
         Number(location?.state?.currentIndex),
       ]);
     }
+    if (location?.state?.is_uploaded) {
+      setProcced(false);
+    }
   }, []);
 
   const [messageApi, contextHolder] = message.useMessage();

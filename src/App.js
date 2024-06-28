@@ -47,26 +47,6 @@ const App = () => {
     setIsMobile(screenWidth < 1000);
   }, [screenWidth]);
 
-  function getInitialOrientation() {
-    return window.matchMedia("(orientation: landscape)").matches
-      ? "landscape"
-      : "portrait";
-  }
-
-  // useEffect(() => {
-  //   function handleOrientationChange() {
-  //     setOrientation(
-  //       window.matchMedia("(orientation: landscape)").matches
-  //         ? "portrait"
-  //         : "landscape"
-  //     );
-  //   }
-  //   window.addEventListener("orientationchange", handleOrientationChange);
-
-  //   return () => {
-  //     window.removeEventListener("orientationchange", handleOrientationChange);
-  //   };
-  // }, []);
 
   const handleOrientationChange = () => {
     const newOrientation = window.orientation || 0;
@@ -81,9 +61,6 @@ const App = () => {
     };
   }, []);
 
-  useEffect(() => {
-    console.log(orientation, "or");
-  }, [orientation]);
   return (
     <>
       {/* <Routes /> */}

@@ -147,7 +147,7 @@ const Capture = (props) => {
 
     if (current_step?.name == "LeftFrontWindow") {
       navigate("/?inspection=" + inspectionToken, {
-        state: { currentIndex: main_index },
+        state: { currentIndex: main_index, is_uploaded: true },
       });
       return;
     }
@@ -206,7 +206,6 @@ const Capture = (props) => {
   useEffect(() => {
     const params = new URLSearchParams(window.location.search);
     const index = params.get("current_index");
-    console.log(index, "This is current index");
     setMainIndex(index);
   }, []);
 
