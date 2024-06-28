@@ -18,7 +18,6 @@ import { useNavigate } from "react-router-dom";
 import CarDirectionGuide from "../components/CarDirectionGuide";
 
 const Capture = (props) => {
-  
   const [viewType, setViewType] = useState("Please capture front view of car.");
   const [main_index, setMainIndex] = useState(null);
   const [inspectionToken, setInspectionToken] = useState("");
@@ -122,7 +121,7 @@ const Capture = (props) => {
     const current_step = getCurrentStepData();
     const current = steps[current_step["id"] + 1];
 
-    setCurrentActiveSide(current.name);
+    if (current?.name) setCurrentActiveSide(current?.name);
 
     if (current_step && current) {
       setViewType(
@@ -145,11 +144,13 @@ const Capture = (props) => {
         console.log("opps something went wrong");
       });
 
-    if (current_step.name == "LeftFrontWindow") {
+    if (current_step?.name == "LeftFrontWindow") {
       navigate("/?inspection=" + inspectionToken, {
         state: { currentIndex: main_index },
       });
+      return;
     }
+
     next();
   }
 
@@ -226,9 +227,7 @@ const Capture = (props) => {
           </Steps>
         </div> */}
 
-        {
-          
-        }
+        {}
         <div className="overlay-text">{viewType && <p>{viewType}</p>}</div>
 
         <div className="guide">
