@@ -53,9 +53,7 @@ const App = () => {
       : "portrait";
   }
 
-  useEffect(() => {
-    getInitialOrientation();
-  }, [orientation]);
+
 
   useEffect(() => {
     function handleOrientationChange() {
@@ -76,7 +74,7 @@ const App = () => {
     <>
       {/* <Routes /> */}
       {isMobile ? (
-        orientation == "landscape" ? (
+        orientation === "landscape" ? (
           token_verifying ? (
             <>
               <Spin
