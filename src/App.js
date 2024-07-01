@@ -45,9 +45,8 @@ const App = () => {
   };
 
   useEffect(() => {
-    console.log(state, "all state");
     verifyToken();
-  }, [state]);
+  }, []);
 
   useEffect(() => {
     setIsMobile(screenWidth < 1000);
@@ -87,7 +86,7 @@ const App = () => {
                 style={{ backgroundColor: "white" }}
               />
             </>
-          ) : inspectionToken ? (
+          ) : state?.inspection_token ? (
             <Routes />
           ) : (
             <div>

@@ -28,6 +28,7 @@ const Capture = (props) => {
   const [controls, setControls] = useState(false);
   const navigate = useNavigate();
   const dispatch = useDispatch();
+  const cam = useSelector((state) => state.cam);
   const [Images, setImages] = useState({
     FrontView: "",
     RightSideView: "",
@@ -137,7 +138,7 @@ const Capture = (props) => {
 
     formData.append(current_step.name, file);
 
-    PostApi("upload-360view?inspection=" + inspectionToken, formData, {
+    PostApi("upload-360view?inspection=" + cam?.inspection_token, formData, {
       headers: {
         "Content-Type": "multipart/form-data",
       },
@@ -150,7 +151,7 @@ const Capture = (props) => {
 
     if (current_step?.name == "LeftFrontWindow") {
       dispatch(setUploadedIndexs(main_index));
-      navigate("/?inspection=" + inspectionToken, {
+      navigate("/?inspection=" + cam?.inspection_token, {
         state: { currentIndex: main_index, is_uploaded: true },
       });
       return;

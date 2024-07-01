@@ -67,7 +67,7 @@ const CaptureSingle = (props) => {
 
     dispatch(setUploadedIndexs(main_index));
 
-    navigate("/?inspection=" + inspectionToken, {
+    navigate("/?inspection=" + cam?.inspection_token, {
       state: {
         currentIndex: main_index,
         is_uploaded: true,
