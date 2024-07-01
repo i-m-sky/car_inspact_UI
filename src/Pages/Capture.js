@@ -16,7 +16,7 @@ import { Step } from "@material-ui/core";
 import { PostApi } from "../Services/Service";
 import { useNavigate } from "react-router-dom";
 import CarDirectionGuide from "../components/CarDirectionGuide";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { setUploadedIndexs } from "../Features/CamSlice";
 
 const Capture = (props) => {
