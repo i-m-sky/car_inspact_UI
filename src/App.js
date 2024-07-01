@@ -6,7 +6,7 @@ import Routes from "./routes";
 import Auth from "./Services/Auth";
 import { LoadingOutlined } from "@ant-design/icons";
 import { Spin } from "antd";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 
 const App = () => {
   const [isMobile, setIsMobile] = useState(false);
@@ -16,6 +16,7 @@ const App = () => {
   const [screenWidth, setScreenWidth] = useState(window.innerWidth);
   const [orientation, setOrientation] = useState(window.orientation || 0);
   const state = useSelector((state) => state.cam);
+  const dispatch = useDispatch();
 
   const verifyToken = async () => {
     const params = new URLSearchParams(window.location.search);
@@ -28,6 +29,7 @@ const App = () => {
     try {
       const res = await Auth.verify_inpection_token(token);
       if (res.data.status) {
+        dispatch(setInspectionToken(token));
         setInspectionToken(true);
         setTokenVerifying(false);
       } else {
@@ -43,7 +45,7 @@ const App = () => {
 
   useEffect(() => {
     console.log(state, "all state");
-    // verifyToken();
+    verifyToken();
   }, [state]);
 
   useEffect(() => {
@@ -65,8 +67,8 @@ const App = () => {
 
   return (
     <>
-      <Routes />
-      {/* {isMobile ? (
+      {/* <Routes /> */}
+      {isMobile ? (
         Math.abs(orientation) === 90 ? (
           token_verifying ? (
             <>
@@ -96,7 +98,7 @@ const App = () => {
         )
       ) : (
         <DesktopView />
-      )} */}
+      )}
     </>
   );
 };

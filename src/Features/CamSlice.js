@@ -8,6 +8,7 @@ const STATUS = Object.freeze({
 const initialState = {
   current_view: "",
   uploaded_index: [],
+  inspection_token: null,
   status: STATUS.IDLE,
   error: null,
 };
@@ -22,6 +23,10 @@ const camSlice = createSlice({
 
     setUploadedIndexs(state, action) {
       state.uploaded_index.push(action.payload);
+    },
+
+    setInspectionToken(state, action) {
+      state.inspection_token = action.payload;
     },
 
     setStatus(state, action) {
@@ -39,7 +44,12 @@ const camSlice = createSlice({
   },
 });
 
-export const { setUploadedIndexs, setCurrentView, setError, clearError } =
-  camSlice.actions;
+export const {
+  setUploadedIndexs,
+  setCurrentView,
+  setInspectionToken,
+  setError,
+  clearError,
+} = camSlice.actions;
 
 export default camSlice;

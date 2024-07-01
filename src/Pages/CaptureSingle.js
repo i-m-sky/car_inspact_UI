@@ -54,7 +54,7 @@ const CaptureSingle = (props) => {
 
     formData.append(currentView, file);
 
-    PostApi("upload?inspection=" + inspectionToken, formData, {
+    PostApi("upload?inspection=" + cam?.inspection_token, formData, {
       headers: {
         "Content-Type": "multipart/form-data",
       },
