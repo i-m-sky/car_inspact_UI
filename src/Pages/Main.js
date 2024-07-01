@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useDebugValue, useEffect, useRef, useState } from "react";
 import $ from "jquery";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "../Assets/css/Carousel.css";
@@ -22,6 +22,8 @@ import { useNavigate } from "react-router-dom";
 import ScannerLoader from "./ScannerLoader";
 import { useLocation } from "react-router-dom";
 import Welcome from "./Welcome";
+import { useDispatch, useSelector } from "react-redux";
+import { setCurrentView, setError } from "../Features/CamSlice";
 
 const Camera = () => {
   const Scanned_Types = [
@@ -51,7 +53,7 @@ const Camera = () => {
   const [selectedType, setSelectedType] = useState("camera");
   const [currentIndex, setCurrentIndex] = useState(null);
   const [uploadedImageIndexs, setUploadedImageIndex] = useState([]);
-  const [currentView, setCurrentView] = useState("");
+  const [currentView, setCurrentViewLocal] = useState("");
   const [loading, setLoading] = useState(false);
   const containerRef = useRef(null);
   const [scannerLoader, setScannerLoader] = useState(false);
@@ -64,6 +66,8 @@ const Camera = () => {
   const [customMsg, setCustomMsg] = useState("Please Upload Images");
   const [procced, setProcced] = useState(true);
   const formRef = useRef(null); // Create a ref for the form
+  const dispatch = useDispatch();
+  const cam = useSelector((state) => state.cam);
 
   const getInspectionToken = async () => {
     const params = new URLSearchParams(window.location.search);
@@ -187,6 +191,8 @@ const Camera = () => {
 
   const showDrawer = (view, index) => {
     setCurrentIndex(index);
+    setCurrentViewLocal(view);
+    dispatch(setCurrentView(view));
     if (view === "View 360") {
       navigate(
         "/capture?inspection=" +
@@ -196,12 +202,17 @@ const Camera = () => {
           "&view=" +
           view
       );
-
-      setCurrentView(view);
       return;
     }
-    setCurrentView(view);
-    setOpen(true);
+
+    navigate(
+      "/capture-single?inspection=" +
+        inspectionToken +
+        "&current_index=" +
+        index +
+        "&view=" +
+        view
+    );
   };
 
   const onClose = () => setOpen(false);
@@ -235,8 +246,12 @@ const Camera = () => {
   };
 
   const handleSubmit = (e) => {
-    e.preventDefault();
-    if (!location?.state?.is_uploaded) {
+    console.log(cam?.uploaded_index, "cam?.uploaded_index");
+    if (
+      !cam?.uploaded_index.includes("0") ||
+      (!cam?.uploaded_index.includes("1") &&
+      !cam?.uploaded_index.includes("2"))
+    ) {
       setNotImageUpload(true);
       setTimeout(() => {
         setNotImageUpload(false);
@@ -244,37 +259,9 @@ const Camera = () => {
       return;
     }
 
-    // if (
-    //   !Object.keys(images).includes("VIN") &&
-    //   !Object.keys(images).includes("Odometer")
-    // ) {
-    //   setCustomMsg("Please Upload One Image Either VIN or Odometer");
-    //   setNotImageUpload(true);
-    //   setTimeout(() => {
-    //     setNotImageUpload(false);
-    //   }, 5000);
-    //   return;
-    // }
-
     setScannerLoader(true);
 
-    const formData = new FormData();
-
-    for (const [label, files] of Object.entries(images)) {
-      files.forEach((file, index) => {
-        formData.append(`${label}`, file);
-      });
-    }
-
-    if (location?.state?.view360) {
-      for (const [label, files] of Object.entries(location?.state?.view360)) {
-        files.forEach((file, index) => {
-          formData.append(`${label}`, file);
-        });
-      }
-    }
-
-    PostApi("/predict?inspection=" + inspectionToken, formData, {
+    PostApi("/predict?inspection=" + inspectionToken, {
       headers: {
         "Content-Type": "multipart/form-data",
       },
@@ -292,13 +279,13 @@ const Camera = () => {
   };
 
   useEffect(() => {
-    console.log(location.state, "stateeee");
-    if (location?.state?.currentIndex) {
-      openMessage();
-      setUploadedImageIndex((uploadedImageIndexs) => [
-        ...uploadedImageIndexs,
-        Number(location?.state?.currentIndex),
-      ]);
+    if (cam?.uploaded_index) {
+      cam?.uploaded_index.map((item) => {
+        setUploadedImageIndex((uploadedImageIndexs) => [
+          ...uploadedImageIndexs,
+          Number(item),
+        ]);
+      });
     }
     if (location?.state?.is_uploaded) {
       setProcced(false);
@@ -345,7 +332,7 @@ const Camera = () => {
             {scannerLoader ? (
               <ScannerLoader />
             ) : (
-              <form onSubmit={handleSubmit}>
+              <>
                 <p className="mt-2 text-dark">
                   <strong>
                     Please upload images by clicking on the sections below to
@@ -406,57 +393,20 @@ const Camera = () => {
                     <Spin />
                   ) : (
                     <>
-                      <button type="submit" className="sbmt-btn mt-1">
+                      <button
+                        type="submit"
+                        className="sbmt-btn mt-1"
+                        onClick={() => handleSubmit()}
+                      >
                         Upload and Submit
                       </button>
                     </>
                   )}
                 </div>
-              </form>
+              </>
             )}
           </div>
         )}
-        <Drawer
-          placement="bottom"
-          height={130}
-          onClose={onClose}
-          open={open}
-          closeIcon={null}
-          extra={<Space />}
-          className="upload-file-drawer"
-        >
-          <div>
-            <h5 className="text-center">Choose an Action</h5>
-            <div className="d-flex">
-              <div className="upload-btns">
-                <div className="cam-btn text-center">
-                  <FaCamera
-                    size={35}
-                    onClick={() => triggerFileInput("camera")}
-                  />
-                </div>
-                <div className="text-center">Camera</div>
-              </div>
-              <div className="upload-btns">
-                <div className="cam-btn text-center">
-                  <ImFolderUpload
-                    size={35}
-                    onClick={() => triggerFileInput("files")}
-                  />
-                </div>
-                <div className="text-center">Files</div>
-              </div>
-            </div>
-          </div>
-        </Drawer>
-        <input
-          type="file"
-          id="upload-btn"
-          accept="image/*"
-          capture={selectedType}
-          style={{ display: "none" }}
-          onChange={handleFileChange}
-        />
       </div>
     </>
   );

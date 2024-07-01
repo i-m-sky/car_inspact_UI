@@ -3,6 +3,14 @@ import Camera from "react-html5-camera-photo";
 import "react-html5-camera-photo/build/css/index.css";
 import "../Assets/css/Capture.css";
 import { useNavigate } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
+import {
+  setDamage,
+  setOdometer,
+  setUploadedIndexs,
+  setVIN,
+} from "../Features/CamSlice";
+import { PostApi } from "../Services/Service";
 
 const CaptureSingle = (props) => {
   const [main_index, setMainIndex] = useState(null);
@@ -10,11 +18,14 @@ const CaptureSingle = (props) => {
   const [currentView, setCurrentView] = useState("");
   const [controls, setControls] = useState(false);
   const navigate = useNavigate();
+  const dispatch = useDispatch();
+  const items = useSelector((state) => state.upload_view);
+  const cam = useSelector((state) => state.cam);
 
   useEffect(() => {
     const params = new URLSearchParams(window.location.search);
     const index = params.get("current_index");
-    const current_view = params.get("current_view");
+    const current_view = params.get("view");
     setMainIndex(index);
     setCurrentView(current_view);
   }, []);
@@ -43,11 +54,23 @@ const CaptureSingle = (props) => {
 
     formData.append(currentView, file);
 
+    PostApi("upload?inspection=" + inspectionToken, formData, {
+      headers: {
+        "Content-Type": "multipart/form-data",
+      },
+    })
+      .then((res) => {})
+      .catch((err) => {
+        alert("opps something went wrong,please re upload images");
+        console.log("opps something went wrong");
+      });
+
+    dispatch(setUploadedIndexs(main_index));
+
     navigate("/?inspection=" + inspectionToken, {
       state: {
         currentIndex: main_index,
         is_uploaded: true,
-        file: file,
         from: "single_upload",
       },
     });

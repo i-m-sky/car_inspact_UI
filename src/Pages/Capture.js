@@ -16,6 +16,8 @@ import { Step } from "@material-ui/core";
 import { PostApi } from "../Services/Service";
 import { useNavigate } from "react-router-dom";
 import CarDirectionGuide from "../components/CarDirectionGuide";
+import { useDispatch } from "react-redux";
+import { setUploadedIndexs } from "../Features/CamSlice";
 
 const Capture = (props) => {
   const [viewType, setViewType] = useState("Please capture front view of car.");
@@ -25,6 +27,7 @@ const Capture = (props) => {
   const [current_active_side, setCurrentActiveSide] = useState("");
   const [controls, setControls] = useState(false);
   const navigate = useNavigate();
+  const dispatch = useDispatch();
   const [Images, setImages] = useState({
     FrontView: "",
     RightSideView: "",
@@ -146,6 +149,7 @@ const Capture = (props) => {
       });
 
     if (current_step?.name == "LeftFrontWindow") {
+      dispatch(setUploadedIndexs(main_index));
       navigate("/?inspection=" + inspectionToken, {
         state: { currentIndex: main_index, is_uploaded: true },
       });
