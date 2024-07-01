@@ -40,7 +40,7 @@ const App = () => {
   };
 
   useEffect(() => {
-    verifyToken();
+    // verifyToken();
   }, []);
 
   useEffect(() => {
@@ -62,8 +62,8 @@ const App = () => {
 
   return (
     <>
-      {/* <Routes /> */}
-      {isMobile ? (
+      <Routes />
+      {/* {isMobile ? (
         Math.abs(orientation) === 90 ? (
           token_verifying ? (
             <>
@@ -93,7 +93,7 @@ const App = () => {
         )
       ) : (
         <DesktopView />
-      )}
+      )} */}
     </>
   );
 };

@@ -7,8 +7,17 @@ import { useNavigate } from "react-router-dom";
 const CaptureSingle = (props) => {
   const [main_index, setMainIndex] = useState(null);
   const [inspectionToken, setInspectionToken] = useState("");
+  const [currentView, setCurrentView] = useState("");
   const [controls, setControls] = useState(false);
   const navigate = useNavigate();
+
+  useEffect(() => {
+    const params = new URLSearchParams(window.location.search);
+    const index = params.get("current_index");
+    const current_view = params.get("current_view");
+    setMainIndex(index);
+    setCurrentView(current_view);
+  }, []);
 
   function base64ToFile(base64String, filename) {
     let byteString = atob(base64String.split(",")[1]);
@@ -30,12 +39,17 @@ const CaptureSingle = (props) => {
   const formData = new FormData();
 
   function handleTakePhoto(dataUri) {
-    const file = base64ToFile(dataUri, current_step.name + ".jpg");
+    const file = base64ToFile(dataUri, currentView + ".jpg");
 
-    formData.append(current_step.name, file);
+    formData.append(currentView, file);
 
     navigate("/?inspection=" + inspectionToken, {
-      state: { currentIndex: main_index, is_uploaded: true, file: file },
+      state: {
+        currentIndex: main_index,
+        is_uploaded: true,
+        file: file,
+        from: "single_upload",
+      },
     });
   }
 
@@ -45,7 +59,7 @@ const CaptureSingle = (props) => {
 
   useEffect(() => {
     const params = new URLSearchParams(window.location.search);
-    const index = params.get("current_index");
+    const index = params?.get("current_index");
     setMainIndex(index);
   }, []);
 
