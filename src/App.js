@@ -7,10 +7,11 @@ import Auth from "./Services/Auth";
 import { LoadingOutlined } from "@ant-design/icons";
 import { Spin } from "antd";
 import { useDispatch, useSelector } from "react-redux";
+import { setInspectionToken } from "./Features/CamSlice";
 
 const App = () => {
   const [isMobile, setIsMobile] = useState(false);
-  const [inspectionToken, setInspectionToken] = useState(false);
+  const [inspectionToken, setInspectiontoken] = useState(false);
   const [token_verifying, setTokenVerifying] = useState(true);
   const [token_message, setTokenMessage] = useState("Invalid token");
   const [screenWidth, setScreenWidth] = useState(window.innerWidth);
@@ -22,23 +23,23 @@ const App = () => {
     const params = new URLSearchParams(window.location.search);
     const token = params.get("inspection");
     if (!token) {
-      setInspectionToken(false);
+      setInspectiontoken(false);
       setTokenVerifying(false);
       return;
     }
     try {
       const res = await Auth.verify_inpection_token(token);
       if (res.data.status) {
-        dispatch(setInspectionToken(token));
-        setInspectionToken(true);
+        setInspectiontoken(true);
         setTokenVerifying(false);
+        dispatch(setInspectionToken(token));
       } else {
         setTokenMessage(res.data.message);
         setTokenVerifying(false);
       }
     } catch (e) {
       setTokenMessage("Token verification falid");
-      setInspectionToken(false);
+      setInspectiontoken(false);
       setTokenVerifying(false);
     }
   };
