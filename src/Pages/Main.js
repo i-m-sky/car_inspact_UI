@@ -249,8 +249,7 @@ const Camera = () => {
     console.log(cam?.uploaded_index, "cam?.uploaded_index");
     if (
       !cam?.uploaded_index.includes("0") ||
-      (!cam?.uploaded_index.includes("1") &&
-      !cam?.uploaded_index.includes("2"))
+      (!cam?.uploaded_index.includes("1") && !cam?.uploaded_index.includes("2"))
     ) {
       setNotImageUpload(true);
       setTimeout(() => {

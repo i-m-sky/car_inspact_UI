@@ -32,9 +32,10 @@ const ComingSoon = () => {
 
   return (
     <div className="coming-container">
-      <h1>Coming Soon</h1>
+      <h1>This URL is accessible only on mobile devices.</h1>
+      {/* <h1>Coming Soon</h1>
       <p>Our website is under construction</p>
-      <div className="countdown">{countdown}</div>
+      <div className="countdown">{countdown}</div> */}
     </div>
   );
 };

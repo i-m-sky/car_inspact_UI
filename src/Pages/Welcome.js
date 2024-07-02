@@ -11,7 +11,9 @@ const Welcome = () => {
           <img src={Logo} style={{ height: "88px", padding: "10px" }}></img>
         </div>
         <div className="text-center mt-2">
-          <span className="w-head">Welcome to Image Capture Application</span>
+          <strong>
+            <span className="w-head">Welcome to Image Capture Application</span>
+          </strong>
         </div>
         <div className="text-center">
           <img src={WelcomeImage} style={{ height: "200px" }}></img>
