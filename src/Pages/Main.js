@@ -12,12 +12,10 @@ import {
   MdOutlineKeyboardDoubleArrowLeft,
   MdOutlineKeyboardDoubleArrowRight,
 } from "react-icons/md";
-import { Alert, Drawer, Space } from "antd";
-import { FaCamera } from "react-icons/fa";
-import { ImFolderUpload } from "react-icons/im";
+import { Alert } from "antd";
 import "../Assets/css/main.css";
 import { GetApi, PostApi } from "../Services/Service";
-import { Image, Spin, Button, message } from "antd";
+import { Spin, Button, message } from "antd";
 import { useNavigate } from "react-router-dom";
 import ScannerLoader from "./ScannerLoader";
 import { useLocation } from "react-router-dom";
@@ -49,15 +47,12 @@ const Camera = () => {
     },
   ];
 
-  const [open, setOpen] = useState(false);
-  const [selectedType, setSelectedType] = useState("camera");
   const [currentIndex, setCurrentIndex] = useState(null);
   const [uploadedImageIndexs, setUploadedImageIndex] = useState([]);
   const [currentView, setCurrentViewLocal] = useState("");
   const [loading, setLoading] = useState(false);
   const containerRef = useRef(null);
   const [scannerLoader, setScannerLoader] = useState(false);
-  const [images, setImages] = useState({});
   const [checkedImages, setCheckedImages] = useState(null);
   const navigate = useNavigate();
   const location = useLocation();
@@ -65,8 +60,9 @@ const Camera = () => {
   const [not_image_upload, setNotImageUpload] = useState(false);
   const [customMsg, setCustomMsg] = useState("Please Upload Images");
   const [procced, setProcced] = useState(true);
-  const formRef = useRef(null); // Create a ref for the form
   const dispatch = useDispatch();
+
+  //getting state form redux
   const cam = useSelector((state) => state.cam);
 
   const getInspectionToken = async () => {
@@ -195,58 +191,17 @@ const Camera = () => {
     dispatch(setCurrentView(view));
     if (view === "View 360") {
       navigate(
-        "/capture?inspection=" +
-          inspectionToken +
-          "&current_index=" +
-          index +
-          "&view=" +
-          view
+        `/capture?inspection=${inspectionToken}&current_index=${index}&view=${view}`
       );
       return;
     }
 
     navigate(
-      "/capture-single?inspection=" +
-        inspectionToken +
-        "&current_index=" +
-        index +
-        "&view=" +
-        view
+      `/capture-single?inspection=${inspectionToken}&current_index=${index}&view=${view}`
     );
   };
 
-  const onClose = () => setOpen(false);
-
-  const handleFileChange = (event) => {
-    event.preventDefault();
-    const files = event.target.files[0];
-    setImages((prevImages) => ({
-      ...prevImages,
-      [currentView]: [...(prevImages[currentView] || []), files],
-    }));
-    setUploadedImageIndex((uploadedImageIndexs) => [
-      ...uploadedImageIndexs,
-      currentIndex,
-    ]);
-    onClose();
-  };
-
-  const triggerFileInput = (type) => {
-    const fileInput = document.getElementById("upload-btn");
-    if (fileInput) {
-      if (type === "camera") {
-        fileInput.setAttribute("capture", "environment");
-        fileInput.accept = "image/*";
-      } else {
-        fileInput.removeAttribute("capture");
-        fileInput.accept = "*/*";
-      }
-      fileInput.click();
-    }
-  };
-
   const handleSubmit = (e) => {
-    console.log(cam?.uploaded_index, "cam?.uploaded_index");
     if (
       !cam?.uploaded_index.includes("0") ||
       (!cam?.uploaded_index.includes("1") && !cam?.uploaded_index.includes("2"))
@@ -273,7 +228,6 @@ const Camera = () => {
       })
       .catch((err) => {
         setScannerLoader(false);
-        console.log("opps something went wrong");
       });
   };
 
@@ -292,22 +246,6 @@ const Camera = () => {
   }, []);
 
   const [messageApi, contextHolder] = message.useMessage();
-  const key = "updatable";
-  const openMessage = () => {
-    messageApi.open({
-      key,
-      type: "loading",
-      content: "Uploading...",
-    });
-    setTimeout(() => {
-      messageApi.open({
-        key,
-        type: "success",
-        content: "360 view Image Uploaded",
-        duration: 2,
-      });
-    }, 1000);
-  };
 
   return (
     <>

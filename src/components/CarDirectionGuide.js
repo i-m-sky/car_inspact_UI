@@ -3,7 +3,7 @@ import "../Assets/css/CarDirectionGuide.css";
 import Car from "../Assets/images/Car.png";
 
 const CarDirectionGuide = (props) => {
-  const [current_dot_class, setCurrentDotClass] = useState("");
+  const [current_dot_class, setCurrentDotClass] = useState("front-dot");
 
   const dot_classes = {
     FrontView: "front-dot",
@@ -23,7 +23,6 @@ const CarDirectionGuide = (props) => {
   useEffect(() => {
     const curr_class = getClassByName(props.current_active_side);
     setCurrentDotClass(curr_class);
-    console.log(curr_class, "curr_class");
   }, [props.current_active_side]);
 
   return (
@@ -33,7 +32,9 @@ const CarDirectionGuide = (props) => {
         <div class="line line2"></div>
         <div class="line line3"></div>
         <div class="line line4"></div>
-        <div class={`dot ${current_dot_class && current_dot_class}`}></div>
+        <div
+          class={`dot scanned-dot ${current_dot_class && current_dot_class}`}
+        ></div>
         <div class="mid">
           <img src={Car} class="inner"></img>
         </div>

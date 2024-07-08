@@ -34,7 +34,6 @@ const camSlice = createSlice({
     },
 
     setError(state, action) {
-      console.log(action.payload, "this i");
       state.error = "This is an error";
     },
 

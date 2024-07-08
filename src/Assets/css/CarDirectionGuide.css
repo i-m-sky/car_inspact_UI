@@ -57,6 +57,7 @@
 
 .front-dot {
   margin-bottom: 1px;
+  background-color: green !important;
 }
 
 .rear-dot {
@@ -92,5 +93,13 @@
   width: 14px;
   background-color: red;
   border-radius: 50%;
+  display: inline-block;
+}
+
+.scanned-dot {
+  height: 30px;
+  width: 60px 50px;
+  background-color: rgb(0, 255, 17);
+  /* border-radius: 5% 20%; */
   display: inline-block;
 }
